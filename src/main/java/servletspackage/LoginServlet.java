@@ -25,6 +25,8 @@ public class LoginServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/ContentAdminPage.jsp");
         //Να φτιάξω το login στο Users.java με τα σωστά queries για τη βάση (τόσο για το login όσο και για το signup)
         // και μετά να συνδέομαι με την άλλη σελίδα jsp (dynamic) περνόντας σαν παράμετρο το είδος χρήστη.
+
+        // Γειαααααα
     }
 
     public void destroy() {
