@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+
+<!-- Gets the user created in the LoginServlet.java and casts it into a ContentAdmin object to be used in the page. -->
 <%@ page import="usersmodelpackage.ContentAdmins" %>
 <% ContentAdmins ca = (ContentAdmins)request.getSession().getAttribute("user");%>
 

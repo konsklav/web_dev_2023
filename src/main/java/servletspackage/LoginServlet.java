@@ -11,7 +11,6 @@ import usersmodelpackage.ContentAdmins;
 import usersmodelpackage.Customers;
 import usersmodelpackage.Users;
 import helperclasses.DbHelper;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -33,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 
         ResultSet loginResult = performLogin(username, password);
 
-        // If the user enters incorrect credentials, redirect them back to LoginPage.jsp and destroy this servlet
+        // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp and destroy this servlet
         if (loginResult == null) {
             response.sendRedirect(request.getContextPath() + "/LoginPage.jsp");
             this.destroy();
@@ -41,11 +40,12 @@ public class LoginServlet extends HttpServlet {
         }
 
         String userType = null;
-        String fullName = null;
+        String name = null;
 
+        //Gets these fields off the db from the result of the query
         try {
+            name = loginResult.getString(2);
             userType = loginResult.getString(5);
-            fullName = loginResult.getString(2);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -57,8 +57,8 @@ public class LoginServlet extends HttpServlet {
             case "CU":
             case "CA":
             case "AD":
-                ContentAdmins customer = new ContentAdmins(fullName, username, password);
-                request.getSession().setAttribute("user", customer);
+                ContentAdmins ca = new ContentAdmins(name, username, password);
+                request.getSession().setAttribute("user", ca);
                 break;
         }
 
@@ -70,7 +70,7 @@ public class LoginServlet extends HttpServlet {
         Users user = new Users(username, password);
         try {
             ResultSet userQuery = user.login(connection);
-            if (userQuery.next()) {
+            if (userQuery.next()) {     //If true, the query returned a result, thus the credentials validate through the db
                 return userQuery;
             }
             else {

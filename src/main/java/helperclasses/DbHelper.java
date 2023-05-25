@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+//This is a helper class that establishes and returns the connection with the db
 public class DbHelper {
     private final static String url = "jdbc:postgresql://localhost:5432/web_dev_db";
     private final static String username = "postgres";
