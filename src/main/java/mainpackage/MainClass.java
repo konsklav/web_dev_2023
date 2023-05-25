@@ -46,7 +46,7 @@ class MainClass {
         switch (login_option) {
             case 1:
                 Customers customer = new Customers("", creds[0], creds[1]);
-                customer.login();System.out.println("What would you like to do? \n" + "1)See available films \n" + "2)Make a reservation \n" + "3)View your reservation");
+                System.out.println("What would you like to do? \n" + "1)See available films \n" + "2)Make a reservation \n" + "3)View your reservation");
                 action_option = Integer.parseInt(scanner.nextLine());
                 if (action_option == 1) {
                     customer.showAvailableFilms();
@@ -58,7 +58,6 @@ class MainClass {
                 break;
             case 2:
                 ContentAdmins contentAdmin = new ContentAdmins("", creds[0], creds[1]);
-                contentAdmin.login();
                 System.out.println("What would you like to do? \n" + "1)Insert a new film \n" + "2)Delete a film \n" + "3)Create a new provoli");
                 action_option = Integer.parseInt(scanner.nextLine());
                 if (action_option == 1) {
@@ -75,7 +74,6 @@ class MainClass {
                 break;
             case 3:
                 Admins admin = new Admins("", creds[0], creds[1]);
-                admin.login();
                 System.out.println("What would you like to do? \n" + "1)Create a user \n" + "2)Update an existing user \n" + "3)Delete a user \n" + "4)Search for a user");
                 action_option = Integer.parseInt(scanner.nextLine());
                 if (action_option == 1) {
