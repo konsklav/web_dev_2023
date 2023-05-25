@@ -10,6 +10,11 @@ public class Users {
     public Users() {
     }
 
+    public Users(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public Users(String name, String username, String password) {
         this.name = name;
         this.username = username;
@@ -40,7 +45,8 @@ public class Users {
         this.password = password;
     }
 
-    public void login() {
+    public void login(Connection  connection) {
+
         System.out.println(username + " has logged in!");
     }
 
