@@ -1,11 +1,18 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ page import="usersmodelpackage.ContentAdmins" %>
+<% ContentAdmins ca = (ContentAdmins)request.getSession().getAttribute("user");%>
+
 <html>
 <head>
     <link rel="stylesheet" href="DynamicPageStyle.css">
     <meta charset="ISO-8859-1">
 </head>
 <body>
+
 <div class="area">
+    <h1> Welcome <%=ca.getName()%> </h1>
+    <h2> <%=ca.getUsername()%> </h2>
+    <h2> <%=ca.getPassword()%> </h2>
     <!-- Εδω μπαίνει το δυναμικό περιεχόμενο -->
 </div>
 <nav class="main-menu">

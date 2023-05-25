@@ -1,55 +1,87 @@
 package servletspackage;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import usersmodelpackage.Admins;
+import usersmodelpackage.ContentAdmins;
+import usersmodelpackage.Customers;
 import usersmodelpackage.Users;
 import helperclasses.DbHelper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.CyclicBarrier;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class LoginServlet extends HttpServlet {
     Connection connection;
 
     public void init(){
+        connection = DbHelper.connect();
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        connection = DbHelper.connect();
-
-        PrintWriter out = response.getWriter();
-        response.setContentType("text/html");
-        out.println("<html><body>");
-
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        out.println("<h1>test</h1>");
+        ResultSet loginResult = performLogin(username, password);
 
-        Users user = new Users(username, password);
-        try {
-            if (user.login(connection)) {
-                out.println("<h1> Successfully logged in! </h1>");
-            } else {
-                out.println("<h1> Wrong username or password! </h1>");
-            };
-        } catch (SQLException ex) {
-            out.println("<h1>" + ex.getMessage() + "</h1>");
+        // If the user enters incorrect credentials, redirect them back to LoginPage.jsp and destroy this servlet
+        if (loginResult == null) {
+            response.sendRedirect(request.getContextPath() + "/LoginPage.jsp");
+            this.destroy();
+            return;
         }
 
-        out.println("<br><br>");
-        out.println("<h1>" + user.getUsername() + ", " + user.getPassword() + "</h1>");
+        String userType = null;
+        String fullName = null;
 
-        out.println("</body></html>");
+        try {
+            userType = loginResult.getString(5);
+            fullName = loginResult.getString(2);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
 
-//        response.sendRedirect(request.getContextPath() + "/ContentAdminPage.jsp");
-        //Να φτιάξω το login στο Users.java με τα σωστά queries για τη βάση (τόσο για το login όσο και για το signup)
-        // και μετά να συνδέομαι με την άλλη σελίδα jsp (dynamic) περνόντας σαν παράμετρο το είδος χρήστη.
+        // TEMPORARY
+        // Every RequestDispatcher redirects to ContentAdminServlet as per the requirements of Exercise 2
+        // In the future, the RequestDispatcher shall redirect to the proper servlet depending on the type of user
+        switch (userType) {
+            case "CU":
+            case "CA":
+            case "AD":
+                ContentAdmins customer = new ContentAdmins(fullName, username, password);
+                request.getSession().setAttribute("user", customer);
+                break;
+        }
+
+        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+    }
+
+
+    private ResultSet performLogin(String username, String password) {
+        Users user = new Users(username, password);
+        try {
+            ResultSet userQuery = user.login(connection);
+            if (userQuery.next()) {
+                return userQuery;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        return null;
     }
 
     public void destroy() {

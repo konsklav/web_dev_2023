@@ -46,8 +46,7 @@ public class Users {
     }
 
     // Accesses DB and queries the "Users" table for the (username, password) combination
-    // If found, returns true, else returns false
-    public boolean login(Connection connection) throws SQLException{
+    public ResultSet login(Connection connection) throws SQLException{
         // 1 - Prepare a SELECT statement with ? being the parameters for the credentials
         String sql = "SELECT * FROM Users WHERE username = ? AND password = ?;";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -56,9 +55,8 @@ public class Users {
         statement.setString(1, username);
         statement.setString(2, password);
 
-        // 3 - Execute/Run the SQL statement
-        // TEMPORARY, this returns true even when credentials are wrong
-        return statement.execute();
+        // 3 - Execute/Run the SQL statement and return the results
+        return statement.executeQuery();
     }
 
     public void logout() {
