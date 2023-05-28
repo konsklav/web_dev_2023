@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-
-<!-- Gets the user created in the LoginServlet.java and casts it into a ContentAdmin object to be used in the page. -->
 <%@ page import="usersmodelpackage.ContentAdmins" %>
+<!-- Gets the user created in the LoginServlet.java and casts it into a ContentAdmin object to be used in the page. -->
 <% ContentAdmins ca = (ContentAdmins)request.getSession().getAttribute("user");%>
 
 <html>
@@ -23,31 +22,7 @@
             <a href="https://jbfarrow.com">
                 <i class="fa fa-home fa-2x"></i>
                 <span class="nav-text">
-                           Community Dashboard
-                </span>
-            </a>
-        </li>
-        <li class="has-subnav">
-            <a href="#">
-                <i class="fa fa-globe fa-2x"></i>
-                <span class="nav-text">
-                            Global Surveyors
-                </span>
-            </a>
-        </li>
-        <li class="has-subnav">
-            <a href="#">
-                <i class="fa fa-plus fa-2x"></i>
-                <span class="nav-text">
-                            Group Hub Forums
-                </span>
-            </a>
-        </li>
-        <li class="has-subnav">
-            <a href="#">
-                <i class="fa fa-camera-retro fa-2x"></i>
-                <span class="nav-text">
-                            Survey Photos
+                           Home
                 </span>
             </a>
         </li>
@@ -55,7 +30,32 @@
             <a href="#">
                 <i class="fa fa-film fa-2x"></i>
                 <span class="nav-text">
-                            Surveying Tutorials
+                            See all available films
+                </span>
+            </a>
+        </li>
+        <li class="has-subnav">
+            <a href="#">
+                <i class="fa fa-plus fa-2x"></i>
+                <span class="nav-text">
+                            Add a new film
+                </span>
+            </a>
+        </li>
+        <li class="has-subnav">
+            <a href="#">
+                <i class="fa fa-camera-retro fa-2x"></i>
+                <span class="nav-text">
+                            Assign film to a screening hall and projection time
+                </span>
+            </a>
+        </li>
+        <!--
+        <li class="has-subnav">
+            <a href="#">
+                <i class="fa fa-globe fa-2x"></i>
+                <span class="nav-text">
+                            Global Surveyors
                 </span>
             </a>
         </li>
@@ -91,6 +91,7 @@
                 </span>
             </a>
         </li>
+        -->
     </ul>
     <ul class="logout">
         <li>
