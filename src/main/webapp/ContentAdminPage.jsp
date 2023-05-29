@@ -11,15 +11,14 @@
 <body>
 
 <div class="area">
-    <h1> Welcome <%=ca.getName()%> </h1>
-    <h2> <%=ca.getUsername()%> </h2>
-    <h2> <%=ca.getPassword()%> </h2>
-    <!-- Εδω μπαίνει το δυναμικό περιεχόμενο -->
+    <!-- Dynamic Content Area -->
+
+    ${requestScope.dynamicContent}
 </div>
 <nav class="main-menu">
     <ul>
         <li>
-            <a href="https://jbfarrow.com">
+            <a href="content-admin-servlet?option=home">
                 <i class="fa fa-home fa-2x"></i>
                 <span class="nav-text">
                            Home
@@ -27,7 +26,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="content-admin-servlet?option=see_all_films">
                 <i class="fa fa-film fa-2x"></i>
                 <span class="nav-text">
                             See all available films
@@ -35,7 +34,7 @@
             </a>
         </li>
         <li class="has-subnav">
-            <a href="#">
+            <a href="content-admin-servlet?option=add_new_film">
                 <i class="fa fa-plus fa-2x"></i>
                 <span class="nav-text">
                             Add a new film
@@ -43,7 +42,7 @@
             </a>
         </li>
         <li class="has-subnav">
-            <a href="#">
+            <a href="content-admin-servlet?option=assign_film">
                 <i class="fa fa-camera-retro fa-2x"></i>
                 <span class="nav-text">
                             Assign film to a screening hall and projection time
@@ -95,7 +94,7 @@
     </ul>
     <ul class="logout">
         <li>
-            <a href="#">
+            <a href="content-admin-servlet?option=logout">
                 <i class="fa fa-power-off fa-2x"></i>
                 <span class="nav-text">
                             Logout

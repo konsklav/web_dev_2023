@@ -62,7 +62,7 @@ public class LoginServlet extends HttpServlet {
                 break;
         }
 
-        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
     }
 
 
