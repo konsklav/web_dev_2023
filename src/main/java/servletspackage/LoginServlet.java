@@ -33,10 +33,10 @@ public class LoginServlet extends HttpServlet {
 
         ResultSet loginResult = performLogin(username, password);
 
-        // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp and destroy this servlet
+        // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp, displaying wrong input warning and destroy this servlet
         if (loginResult == null) {
-            response.sendRedirect(request.getContextPath() + "/LoginPage.jsp");
-            this.destroy();
+            request.setAttribute("wrongCredentialsWarning", "!Wrong username and/or password, please try again!");
+            request.getRequestDispatcher("LoginPage.jsp").forward(request, response);
             return;
         }
 
@@ -74,7 +74,7 @@ public class LoginServlet extends HttpServlet {
          */
         ContentAdmins ca = new ContentAdmins(name, username, password);
         request.getSession().setAttribute("user", ca);
-            request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
+        request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
 
     }
 

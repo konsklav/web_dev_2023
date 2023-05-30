@@ -39,7 +39,7 @@ public class ContentAdminServlet extends HttpServlet {
                 request.setAttribute("dynamicContent", "Εδώ θα μπει το δυναμικό HTML 3");
                 break;
             case "logout":
-                //Εδώ θα μπει ο κώδικας για το logout, να χρησιμοποιήσουμε τη μέθοδο logout απο το Users.java
+                //Code to be implemented in exercise 2
                 break;
         }
 

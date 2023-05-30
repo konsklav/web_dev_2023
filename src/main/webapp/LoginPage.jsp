@@ -12,6 +12,7 @@
 	<h1>Login</h1>
 	<input type="text" name="username" value="" placeholder="Username">
 	<input type="password" name="password" value="" placeholder="Password">
+	${requestScope.wrongCredentialsWarning} <!-- Displays warning when the user enters wrong username and/or password -->
 	<input type="submit" name="login" value="Login">
 	<p>Ιf you don't have an account sign up <a href="SignupPage.jsp">here</a>.</p>
 	</form>

@@ -12,7 +12,6 @@
 
 <div class="area">
     <!-- Dynamic Content Area -->
-
     ${requestScope.dynamicContent}
 </div>
 <nav class="main-menu">
@@ -43,7 +42,7 @@
         </li>
         <li class="has-subnav">
             <a href="content-admin-servlet?option=assign_film">
-                <i class="fa fa-camera-retro fa-2x"></i>
+                <i class="fa fa-globe fa-2x"></i>
                 <span class="nav-text">
                             Assign film to a screening hall and projection time
                 </span>
@@ -52,7 +51,7 @@
         <!--
         <li class="has-subnav">
             <a href="#">
-                <i class="fa fa-globe fa-2x"></i>
+                <i class="fa fa-camera-retro fa-2x"></i>
                 <span class="nav-text">
                             Global Surveyors
                 </span>
