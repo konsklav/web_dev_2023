@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.client.Client;
 import usersmodelpackage.Admins;
 import usersmodelpackage.ContentAdmins;
 import usersmodelpackage.Customers;
@@ -53,16 +54,28 @@ public class LoginServlet extends HttpServlet {
         // TEMPORARY
         // Every RequestDispatcher redirects to ContentAdminServlet as per the requirements of Exercise 2
         // In the future, the RequestDispatcher shall redirect to the proper servlet depending on the type of user
-        switch (userType) {
+        /*switch (userType) {
             case "CU":
+                Customers cu = new Customers(name, username, password);
+                request.getSession().setAttribute("user", cu);
+                request.getRequestDispatcher("/client-servlet").forward(request, response);
+                break;
             case "CA":
+                Admins ad = new Admins(name, username, password);
+                request.getSession().setAttribute("user", ad);
+                request.getRequestDispatcher("/admin-servlet").forward(request, response);
+                break;
             case "AD":
                 ContentAdmins ca = new ContentAdmins(name, username, password);
                 request.getSession().setAttribute("user", ca);
+                request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
                 break;
-        }
+               }
+         */
+        ContentAdmins ca = new ContentAdmins(name, username, password);
+        request.getSession().setAttribute("user", ca);
+            request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
 
-        request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
     }
 
 
