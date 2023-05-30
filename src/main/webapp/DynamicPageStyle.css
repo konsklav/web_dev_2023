@@ -123,10 +123,10 @@ nav ul,nav li {
     height: 100%;
     padding: 200px;*/
     margin:0;
-    padding:2000px;
+    padding: 5%;
     width:65%;
     min-width:100px;
-    height:auto;
+    height:100%;
 }
 
 @font-face {
