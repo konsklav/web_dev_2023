@@ -3,6 +3,7 @@ package mainpackage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -33,7 +34,7 @@ class MainClass {
         return creds;
     }
 
-    public static void login() {
+    public static void login() throws SQLException {
         System.out.println("Welcome to the Cinema!");
         System.out.println("Choose a login option from the menu bellow: \n" + "1)Login as a Customer \n" + "2)Login as a Content Admin \n" + "3)Login as an Admin \n" + "4)Create an account");
 
