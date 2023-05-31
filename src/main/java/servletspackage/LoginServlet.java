@@ -21,10 +21,8 @@ import java.util.concurrent.CyclicBarrier;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class LoginServlet extends HttpServlet {
-    Connection connection;
 
     public void init(){
-        connection = DbHelper.connect();
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -82,7 +80,7 @@ public class LoginServlet extends HttpServlet {
     private ResultSet performLogin(String username, String password) {
         Users user = new Users(username, password);
         try {
-            ResultSet userQuery = user.login(connection);
+            ResultSet userQuery = user.login();
             if (userQuery.next()) {     //If true, the query returned a result, thus the credentials validate through the db
                 return userQuery;
             }
@@ -95,13 +93,5 @@ public class LoginServlet extends HttpServlet {
         }
 
         return null;
-    }
-
-    public void destroy() {
-        try {
-            connection.close();
-        } catch (SQLException ex) {
-
-        }
     }
 }

@@ -1,11 +1,13 @@
 package usersmodelpackage;
 
+import helperclasses.DbHelper;
+
 import java.sql.*;
 
 public class Users {
-    private String name;
-    private String username;
-    private String password;
+    protected String name;
+    protected String username;
+    protected String password;
 
     public Users() {
     }
@@ -46,17 +48,8 @@ public class Users {
     }
 
     // Accesses DB and queries the "Users" table for the (username, password) combination
-    public ResultSet login(Connection connection) throws SQLException{
-        // 1 - Prepare a SELECT statement with ? being the parameters for the credentials
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?;";
-        PreparedStatement statement = connection.prepareStatement(sql);
-
-        // 2 - Set the parameters
-        statement.setString(1, username);
-        statement.setString(2, password);
-
-        // 3 - Execute/Run the SQL statement and return the results
-        return statement.executeQuery();
+    public ResultSet login() throws SQLException{
+        return DbHelper.findUser(username, password);
     }
 
     public void logout() {

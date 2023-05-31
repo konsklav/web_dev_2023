@@ -14,12 +14,9 @@ import java.time.Duration;
 
 @WebServlet(name = "contentAdminServlet", value = "/content-admin-servlet")
 public class ContentAdminServlet extends HttpServlet {
-    Connection connection = null;
-
     @Override
     public void init() throws ServletException {
         super.init();
-        connection = DbHelper.connect();
     }
 
     @Override
@@ -70,14 +67,11 @@ public class ContentAdminServlet extends HttpServlet {
         html += "<tr>\n" +
                 "<th>Title</th>\n" +
                 "<th>Category</th>\n" +
-                "<th>Description</th>\n" +
                 "<th>Duration</th>" +
                 "</tr>";
         try {
             // 2 -> Prepare and execute SQL SELECT Query from table Films
-            String sql = "SELECT title, category, description, duration FROM Films;";
-            Statement statement = connection.createStatement();
-            ResultSet filmResults = statement.executeQuery(sql);
+            ResultSet filmResults = DbHelper.getAllFilms();
 
             // 3 -> For each row obtained, get the data and create an
             //      HTML table row (<tr>)
@@ -86,8 +80,8 @@ public class ContentAdminServlet extends HttpServlet {
                 String category = filmResults.getString(2);
                 String description = filmResults.getString(3);
                 int duration = filmResults.getInt(4);
-                Duration tempDuration = Duration.ofMinutes(duration);
-                String formattedDuration = String.format("%02d:%02d:%02d",
+                Duration tempDuration = Duration.ofSeconds(duration);
+                String formattedDuration = String.format("%d:%02d:%02d",
                         tempDuration.toHours(),
                         tempDuration.toMinutesPart(),
                         tempDuration.toSecondsPart());
@@ -115,13 +109,4 @@ public class ContentAdminServlet extends HttpServlet {
         return null;
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
