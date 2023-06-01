@@ -1,7 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-<%@ page import="usersmodelpackage.ContentAdmins" %>
-<!-- Gets the user created in the LoginServlet.java and casts it into a ContentAdmin object to be used in the page. -->
-<% ContentAdmins ca = (ContentAdmins)request.getSession().getAttribute("user");%>
 
 <html>
 <head>
@@ -25,10 +22,10 @@
             </a>
         </li>
         <li>
-            <a href="content-admin-servlet?option=see_all_films">
+            <a href="content-admin-servlet?option=view_all_films">
                 <i class="fa fa-film fa-2x"></i>
                 <span class="nav-text">
-                            See all available films
+                            View all available films
                 </span>
             </a>
         </li>

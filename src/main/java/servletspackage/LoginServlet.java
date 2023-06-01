@@ -31,9 +31,9 @@ public class LoginServlet extends HttpServlet {
 
         ResultSet loginResult = performLogin(username, password);
 
-        // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp, displaying wrong input warning and destroy this servlet
+        // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp, displaying wrong input warning.
         if (loginResult == null) {
-            request.setAttribute("wrongCredentialsWarning", "!Wrong username and/or password, please try again!");
+            request.setAttribute("wrongCredentialsWarning", "<h3 style=\"color: red;\"> !! Wrong username and/or password, please try again. </h3>");
             request.getRequestDispatcher("LoginPage.jsp").forward(request, response);
             return;
         }
@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
             System.out.println(ex.getMessage());
         }
 
-        // TEMPORARY
+        // TEMPORARY:
         // Every RequestDispatcher redirects to ContentAdminServlet as per the requirements of Exercise 2
         // In the future, the RequestDispatcher shall redirect to the proper servlet depending on the type of user
         /*switch (userType) {
@@ -73,12 +73,12 @@ public class LoginServlet extends HttpServlet {
         ContentAdmins ca = new ContentAdmins(name, username, password);
         request.getSession().setAttribute("user", ca);
         request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
-
     }
 
-
+    //Creates a User object based on the username and password inserted and performs the login function. Returns null if the inserted credentials do not match with a users credentials in the db
     private ResultSet performLogin(String username, String password) {
         Users user = new Users(username, password);
+
         try {
             ResultSet userQuery = user.login();
             if (userQuery.next()) {     //If true, the query returned a result, thus the credentials validate through the db

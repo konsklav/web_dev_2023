@@ -1,17 +1,17 @@
 package helperclasses;
 
 import cinemamodelpackage.Films;
-
 import java.lang.annotation.Documented;
 import java.sql.*;
 import java.time.Duration;
 
-//This is a helper class that establishes and returns the connection with the db
+//This is a helper class that establishes the connection with the db and implements the key functions that require connection and access to the db
 public class DbHelper {
     private final static String url = "jdbc:postgresql://localhost:5432/web_dev_db";
     private final static String username = "postgres";
     private final static String password = "p21xxx";
     private static Connection conn = null;
+
     private static void connect(){
         Connection connection = null;
         try {
@@ -51,6 +51,7 @@ public class DbHelper {
         // 3 - Execute/Run the SQL statement and return the resulting row
         return statement.executeQuery();
     }
+
     public static boolean addNewFilm(Films film) throws SQLException {
         connectIfNull();
 
@@ -64,6 +65,4 @@ public class DbHelper {
         // Return true if the row update count is greater than 0.
         return statement.executeUpdate() > 0;
     }
-
-
 }

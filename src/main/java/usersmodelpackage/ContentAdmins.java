@@ -2,7 +2,6 @@ package usersmodelpackage;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-
 import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import cinemamodelpackage.Provoles;
@@ -18,7 +17,7 @@ public class ContentAdmins extends Users{
     }
 
     public Films insertFilm(Films filmToBeInserted) throws SQLException {
-        //Will insert the film into the db
+        //Uses the DbHelper class to insert the film into the db, displays the appropriate message and returns the film that was inserted.
         if (DbHelper.addNewFilm(filmToBeInserted)) {
             System.out.println
                     ("Film with title " + filmToBeInserted.getFilmTitle() + " inserted successfully by " + username);
@@ -37,7 +36,7 @@ public class ContentAdmins extends Users{
 
     public Provoles createNewProvoli(Films film, Cinemas cinema, LocalDateTime startTime) throws SQLException {
         Provoles provoli = new Provoles(film, cinema, startTime);
-        //Insert this provoli to the db
+        //Will insert this provoli to the db
         System.out.println("Created new provoli!");
         return provoli;
     }

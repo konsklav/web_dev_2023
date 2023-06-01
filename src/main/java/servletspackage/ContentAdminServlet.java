@@ -28,12 +28,11 @@ public class ContentAdminServlet extends HttpServlet {
 
         //Sets the appropriate dynamic html code based on that option and stores it in the dynamicContent request attribute
         switch (selectedOption){
-            //Πάνω από όλα τα request.setAttribute.. να βάλουμε τον κώδικα που χρειάζεται με τα queries κλπ (όπου χρειάζεται)
             case "home":
                 request.setAttribute("dynamicContent", "<h1> Welcome " + ca.getName() + " </h1>\n" + "<h2> " + ca.getUsername() + " </h2>\n" + "<h2> " + ca.getPassword() + " </h2>");
                 break;
             //
-            case "see_all_films":
+            case "view_all_films":
                 request.setAttribute("dynamicContent", viewAllFilms());
                 break;
             case "add_new_film":
@@ -60,7 +59,6 @@ public class ContentAdminServlet extends HttpServlet {
         request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
     }
 
-
     private String viewAllFilms() {
         // 1 -> Initialize table HTML
         String html = "<table class='films_table'>\n";
@@ -70,12 +68,11 @@ public class ContentAdminServlet extends HttpServlet {
                 "<th>Duration</th>" +
                 "</tr>";
         try {
-            // 2 -> Prepare and execute SQL SELECT Query from table Films
+            // 2 -> Gets the films through the DbHelper class and adds them in a ResultSet object
             ResultSet filmResults = DbHelper.getAllFilms();
 
-            // 3 -> For each row obtained, get the data and create an
-            //      HTML table row (<tr>)
-            while (filmResults.next()) {
+            // 3 -> For each row obtained, get the data and create an HTML table row (<tr>)
+            while (filmResults.next()) {    //If there are movies in the ResultSet --> continue
                 String title = filmResults.getString(1);
                 String category = filmResults.getString(2);
                 String description = filmResults.getString(3);
@@ -97,7 +94,7 @@ public class ContentAdminServlet extends HttpServlet {
             ex.printStackTrace();
         }
 
-        // 4 -> Close the <table> tag and return :)
+        // 4 -> Close the <table> tag and return the html string
         return html + "</table>";
     }
 
@@ -108,5 +105,4 @@ public class ContentAdminServlet extends HttpServlet {
     private String assignFilm() {
         return null;
     }
-
 }

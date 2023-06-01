@@ -14,8 +14,8 @@
 	<input type="text" name="" value="" placeholder="Surname">
 	<input type="text" name="" value="" placeholder="Username"> 
 	<input type="password" name="" value="" placeholder="Password">
-	<input type="password" name="" value="" placeholder="Confirm Password"> 
-	<!--<p>Oups... Something went wrong.</p>-->
+	<input type="password" name="" value="" placeholder="Confirm Password">
+	${requestScope.passwordsNotMatchingWarning} <!-- Displays warning when the user enters two different passwords -->
 	<input type="submit" name="" value="Sign Up">
 		<p>Already have an account? <a href="LoginPage.jsp">Login</a>. </p>
 	</form>
