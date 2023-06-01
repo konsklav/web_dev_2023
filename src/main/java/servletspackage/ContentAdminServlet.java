@@ -1,5 +1,6 @@
 package servletspackage;
 
+import cinemamodelpackage.Films;
 import helperclasses.DbHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -11,9 +12,14 @@ import usersmodelpackage.ContentAdmins;
 import java.io.IOException;
 import java.sql.*;
 import java.time.Duration;
+import java.util.Objects;
 
 @WebServlet(name = "contentAdminServlet", value = "/content-admin-servlet")
 public class ContentAdminServlet extends HttpServlet {
+
+    ContentAdmins ca = null;
+    String postMode = null;
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -52,11 +58,18 @@ public class ContentAdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ContentAdmins ca = (ContentAdmins)request.getSession().getAttribute("user");
+        // If the user is redirected from LoginPage.jsp, do the following:
+        if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
+            ca = (ContentAdmins) request.getSession().getAttribute("user");
+            request.setAttribute("from-login", false);
+            request.setAttribute("dynamicContent", "<h1> Welcome " + ca.getName() + " </h1>\n" + "<h2> " + ca.getUsername() + " </h2>\n" + "<h2> " + ca.getPassword() + " </h2>");
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+            return;
+        }
 
-        request.setAttribute("dynamicContent", "<h1> Welcome " + ca.getName() + " </h1>\n" + "<h2> " + ca.getUsername() + " </h2>\n" + "<h2> " + ca.getPassword() + " </h2>");
-
-        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        if (Objects.equals(postMode, "insertFilm")) {
+            handleInsertFilm(request);
+        }
     }
 
     private String viewAllFilms() {
@@ -99,7 +112,47 @@ public class ContentAdminServlet extends HttpServlet {
     }
 
     private String addNewFilm() {
-        return null;
+        // Create form with text fields:
+        // - Title, Category, Description, Duration
+        String html =
+                "<form action=\"content-admin-servlet\" method=\"post\">\n" +
+                "<label for=\"title\"> Title </label>\n" +
+                        "<input type=\"text\" id=\"title\" name=\"title\"><br>\n" +
+                        "<label for=\"category\"> Category </label>\n" +
+                        "<input type=\"text\" id=\"category\" name=\"category\"><br>\n" +
+                        "<label for=\"description\"> Description </label>\n" +
+                        "<input type=\"text\" id=\"description\" name=\"description\"><br>\n" +
+                        "<label for=\"duration\"> Duration </label>\n" +
+                        "<input type=\"text\" id=\"duration\" name=\"duration\"><br>\n" +
+                        "<input type=\"submit\">" +
+                        "</form>";
+        postMode = "insertFilm";
+        return html;
+    }
+
+    private void handleInsertFilm(HttpServletRequest request) {
+        // 1 -> Get POST parameters
+        String title = request.getParameter("title");
+        String category = request.getParameter("category");
+        String description = request.getParameter("description");
+        int duration = Integer.parseInt(request.getParameter("duration"));
+
+        // 2 -> Create Films object
+        Films film = new Films();
+        film.setFilmTitle(title);
+        film.setFilmCategory(category);
+        film.setFilmDescription(description);
+        film.setFilmDuration(Duration.ofSeconds(duration));
+
+        // 3 -> Insert Films object into DB
+        try {
+            ca.insertFilm(film);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 4 -> Go back to addNewFilms dynamic view
+        request.setAttribute("dynamicContent", addNewFilm());
     }
 
     private String assignFilm() {

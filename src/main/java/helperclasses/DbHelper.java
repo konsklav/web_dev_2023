@@ -12,7 +12,7 @@ public class DbHelper {
     private final static String password = "p21xxx";
     private static Connection conn = null;
 
-    private static void connect(){
+    private static void connect() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -55,7 +55,7 @@ public class DbHelper {
     public static boolean addNewFilm(Films film) throws SQLException {
         connectIfNull();
 
-        String sql = "INSERT INTO Films VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Films (title, category, description, duration) VALUES (?, ?, ?, ?)";
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setString(1, film.getFilmTitle());
         statement.setString(2, film.getFilmCategory());

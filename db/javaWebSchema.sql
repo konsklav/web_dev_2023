@@ -1,5 +1,5 @@
 -- Films
-CREATE TABLE IF NOT EXISTS Films(
+CREATE TABLE IF NOT EXISTS Films (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "title" VARCHAR(255) NOT NULL,
     "category" VARCHAR(255) NOT NULL,
@@ -8,24 +8,24 @@ CREATE TABLE IF NOT EXISTS Films(
 );
 
 -- Cinemas
-CREATE TABLE IF NOT EXISTS "Cinemas"(
+CREATE TABLE IF NOT EXISTS Cinemas (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "is_3d" BOOLEAN NOT NULL,
     "nr_of_seats" INTEGER NOT NULL
 );
 
 -- Provoles
-CREATE TABLE IF NOT EXISTS Provoles(
+CREATE TABLE IF NOT EXISTS Provoles (
     "id" SERIAL NOT NULL UNIQUE, -- Alternate key
     "film" INTEGER NOT NULL REFERENCES Films,
-    "cinema" INTEGER NOT NULL REFERENCES "Cinemas",
+    "cinema" INTEGER NOT NULL REFERENCES Cinemas,
     "start_date" TIMESTAMP NOT NULL,
     "nr_of_reservations" INTEGER NOT NULL CHECK (nr_of_reservations >= 0),
     PRIMARY KEY ("film", "cinema", "start_date")
 );
 
 -- Users
-CREATE TABLE IF NOT EXISTS Users(
+CREATE TABLE IF NOT EXISTS Users (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "name" VARCHAR(255) NOT NULL,
     "username" VARCHAR(255) NOT NULL UNIQUE, -- Alternate key, no two users can have the same username
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Users(
 );
 
 -- CustomerReservations
-CREATE TABLE IF NOT EXISTS CustomerReservations(
+CREATE TABLE IF NOT EXISTS CustomerReservations (
     "customer_id" INTEGER NOT NULL REFERENCES Users("id"),
     "provoli_id" INTEGER NOT NULL REFERENCES Provoles("id"),
     "nr_of_seats" INTEGER NOT NULL CHECK (nr_of_seats > 0),

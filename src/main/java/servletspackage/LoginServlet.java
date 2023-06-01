@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
 
         // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp, displaying wrong input warning.
         if (loginResult == null) {
-            request.setAttribute("wrongCredentialsWarning", "<h3 style=\"color: red;\"> !! Wrong username and/or password, please try again. </h3>");
+            request.setAttribute("wrongCredentialsWarning", "<h3 style=\"color: red; font-size: 15px;\"> !! Wrong username and/or password, please try again. </h3><br>");
             request.getRequestDispatcher("LoginPage.jsp").forward(request, response);
             return;
         }
@@ -72,6 +72,7 @@ public class LoginServlet extends HttpServlet {
          */
         ContentAdmins ca = new ContentAdmins(name, username, password);
         request.getSession().setAttribute("user", ca);
+        request.setAttribute("from-login", true);
         request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
     }
 

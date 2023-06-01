@@ -16,7 +16,7 @@ public class ContentAdmins extends Users{
         super(name, username, password);
     }
 
-    public Films insertFilm(Films filmToBeInserted) throws SQLException {
+    public void insertFilm(Films filmToBeInserted) throws SQLException {
         //Uses the DbHelper class to insert the film into the db, displays the appropriate message and returns the film that was inserted.
         if (DbHelper.addNewFilm(filmToBeInserted)) {
             System.out.println
@@ -24,8 +24,6 @@ public class ContentAdmins extends Users{
         } else {
             System.out.println("Film failed to insert ");
         }
-
-        return filmToBeInserted;
     }
 
     public Films deleteFilm(Films filmToBeDeleted) throws SQLException {
