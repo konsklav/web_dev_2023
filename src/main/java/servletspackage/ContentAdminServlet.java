@@ -41,8 +41,8 @@ public class ContentAdminServlet extends HttpServlet {
             case "view_all_films":
                 request.setAttribute("dynamicContent", viewAllFilms());
                 break;
-            case "add_new_film":
-                request.setAttribute("dynamicContent", addNewFilm());
+            case "insert_new_film":
+                request.setAttribute("dynamicContent", insertNewFilm());
                 break;
             case "assign_film":
                 request.setAttribute("dynamicContent", assignFilm());
@@ -58,7 +58,7 @@ public class ContentAdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // If the user is redirected from LoginPage.jsp, do the following:
+        // If the user is redirected from LoginPage.jsp, do the following and return:
         if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
             ca = (ContentAdmins) request.getSession().getAttribute("user");
             request.setAttribute("from-login", false);
@@ -67,8 +67,12 @@ public class ContentAdminServlet extends HttpServlet {
             return;
         }
 
-        if (Objects.equals(postMode, "insertFilm")) {
-            handleInsertFilm(request);
+        //Else, based on the postMode attribute, execute the appropriate methods
+        switch (postMode) {
+            case "insert_film":
+                handleInsertNewFilm(request, response);
+            case "assign_film":
+                handleAssignFilm(request, response);
         }
     }
 
@@ -111,26 +115,22 @@ public class ContentAdminServlet extends HttpServlet {
         return html + "</table>";
     }
 
-    private String addNewFilm() {
-        // Create form with text fields:
-        // - Title, Category, Description, Duration
+    private String insertNewFilm() {
+        postMode = "insert_film";
+
+        // Create form with text fields: Title, Category, Description, Duration
         String html =
                 "<form action=\"content-admin-servlet\" method=\"post\">\n" +
-                "<label for=\"title\"> Title </label>\n" +
-                        "<input type=\"text\" id=\"title\" name=\"title\"><br>\n" +
-                        "<label for=\"category\"> Category </label>\n" +
-                        "<input type=\"text\" id=\"category\" name=\"category\"><br>\n" +
-                        "<label for=\"description\"> Description </label>\n" +
-                        "<input type=\"text\" id=\"description\" name=\"description\"><br>\n" +
-                        "<label for=\"duration\"> Duration </label>\n" +
-                        "<input type=\"text\" id=\"duration\" name=\"duration\"><br>\n" +
-                        "<input type=\"submit\">" +
-                        "</form>";
-        postMode = "insertFilm";
+                "<label for=\"title\"> Title </label>\n" + "<input type=\"text\" id=\"title\" name=\"title\"><br>\n" +
+                    "<label for=\"category\"> Category </label>\n" + "<input type=\"text\" id=\"category\" name=\"category\"><br>\n" +
+                    "<label for=\"description\"> Description </label>\n" + "<input type=\"text\" id=\"description\" name=\"description\"><br>\n" +
+                    "<label for=\"duration\"> Duration </label>\n" + "<input type=\"text\" id=\"duration\" name=\"duration\"><br><br>\n" +
+                    "<input type=\"submit\" value=\"Submit\">" +
+                "</form>";
         return html;
     }
 
-    private void handleInsertFilm(HttpServletRequest request) {
+    private void handleInsertNewFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 1 -> Get POST parameters
         String title = request.getParameter("title");
         String category = request.getParameter("category");
@@ -151,11 +151,19 @@ public class ContentAdminServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
 
-        // 4 -> Go back to addNewFilms dynamic view
-        request.setAttribute("dynamicContent", addNewFilm());
+        // 4 -> Go back to insertNewFilm's dynamic view
+        request.setAttribute("dynamicContent", insertNewFilm());
+        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
     }
 
     private String assignFilm() {
-        return null;
+        postMode = "assign_film";
+
+        String html = "html code!";
+        return html;
+    }
+
+    private void handleAssignFilm(HttpServletRequest request, HttpServletResponse response) {
+        //Code to be implemented
     }
 }

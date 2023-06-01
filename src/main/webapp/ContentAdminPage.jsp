@@ -30,7 +30,7 @@
             </a>
         </li>
         <li class="has-subnav">
-            <a href="content-admin-servlet?option=add_new_film">
+            <a href="content-admin-servlet?option=insert_new_film">
                 <i class="fa fa-plus fa-2x"></i>
                 <span class="nav-text">
                             Add a new film
