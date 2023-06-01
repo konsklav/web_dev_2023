@@ -58,3 +58,21 @@ COMMENT
 ON COLUMN
     CustomerReservations."customer_id" IS 'Apply CHECK that the ID belongs to a user of type ''CU''';
 
+CREATE OR REPLACE FUNCTION check_if_customer_when_reserving()
+RETURNS TRIGGER
+AS
+$$
+BEGIN
+    IF ((SELECT type FROM Users WHERE id = NEW.customer_id) <> 'CU') THEN
+        RAISE EXCEPTION 'User "%" is not a customer', (SELECT name FROM Users WHERE id = NEW.customer_id);
+    END IF;
+    RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER validate_customer_reservation
+BEFORE INSERT ON CustomerReservations
+FOR EACH ROW
+EXECUTE FUNCTION check_if_customer_when_reserving();
+
