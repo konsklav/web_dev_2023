@@ -35,7 +35,7 @@ public class ContentAdminServlet extends HttpServlet {
         //Sets the appropriate dynamic html code based on that option and stores it in the dynamicContent request attribute
         switch (selectedOption){
             case "home":
-                request.setAttribute("dynamicContent", "<div class=\"text\">"+"<h1> Welcome " + ca.getName() + " </h1>\n" + "<h2> " + ca.getUsername() + " </h2>\n" + "<h2> " + ca.getPassword() + " </h2>"+"</div>");
+                request.setAttribute("dynamicContent", "<div class=\"text\"> " + "<h1> Welcome, " + ca.getName() + "! </h1>\n" + "<h3> Choose an option in the menu on your left! </h3>" + " </div>");
                 break;
             //
             case "view_all_films":
@@ -62,7 +62,7 @@ public class ContentAdminServlet extends HttpServlet {
         if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
             ca = (ContentAdmins) request.getSession().getAttribute("user");
             request.setAttribute("from-login", false);
-            request.setAttribute("dynamicContent", "<div class=\"text\">"+"<h1 > Welcome " + ca.getName() + " </h1>\n" + "<h2> " + ca.getUsername() + " </h2>\n" + "<h2 > " + ca.getPassword() + " </h2>"+"</div>");
+            request.setAttribute("dynamicContent", "<div class=\"text\"> " + "<h1> Welcome, " + ca.getName() + "! </h1>\n" + "<h3> Choose an option in the menu on your left! </h3>" + " </div>");
             request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
             return;
         }
@@ -120,7 +120,7 @@ public class ContentAdminServlet extends HttpServlet {
 
         // Create form with text fields: Title, Category, Description, Duration
         String html =
-                "<form class='add_film' action=\"content-admin-servlet\" method=\"post\">\n" +
+                "<form class='insert_film_form' action=\"content-admin-servlet\" method=\"post\">\n" +
                 "<label for=\"title\"> Title </label>\n" + "<input type=\"text\" id=\"title\" name=\"title\"><br>\n" +
                     "<label for=\"category\"> Category </label>\n" + "<input type=\"text\" id=\"category\" name=\"category\"><br>\n" +
                     "<label for=\"description\"> Description </label>\n" + "<input type=\"text\" id=\"description\" name=\"description\"><br>\n" +
@@ -158,7 +158,7 @@ public class ContentAdminServlet extends HttpServlet {
 
     private String assignFilm() {
         postMode = "assign_film";
-
+        //Code to be implemented
         String html = "html code!";
         return html;
     }
