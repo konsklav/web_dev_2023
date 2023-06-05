@@ -1,20 +1,20 @@
 package cinemamodelpackage;
 
 public class Cinemas {
-    private String cinemaId;
+    private int cinemaId;
     public boolean cinemaIs3D;
     private int cinemaNumberOfSeats;
 
     public Cinemas() {
     }
 
-    public Cinemas(String cinemaId, boolean cinemaIs3D, int cinemaNumberOfSeats) {
+    public Cinemas(int cinemaId, boolean cinemaIs3D, int cinemaNumberOfSeats) {
         this.cinemaId = cinemaId;
         this.cinemaIs3D = cinemaIs3D;
         this.cinemaNumberOfSeats = cinemaNumberOfSeats;
     }
 
-    public String getCinemaId() {
+    public int getCinemaId() {
         return cinemaId;
     }
 
@@ -22,7 +22,7 @@ public class Cinemas {
         return cinemaNumberOfSeats;
     }
 
-    public void setCinemaId(String cinemaId) {
+    public void setCinemaId(int cinemaId) {
         this.cinemaId = cinemaId;
     }
 

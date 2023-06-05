@@ -1,5 +1,6 @@
 package helperclasses;
 
+import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import java.lang.annotation.Documented;
 import java.sql.*;
@@ -64,5 +65,19 @@ public class DbHelper {
 
         // Return true if the row update count is greater than 0.
         return statement.executeUpdate() > 0;
+    }
+
+    public static ResultSet getCinema(int cinema_id) throws SQLException{
+        connectIfNull();
+
+        // 1 - Prepare a SELECT statement with ? being the parameter
+        String sql = "SELECT * FROM Cinemas WHERE id = ?;";
+        PreparedStatement statement = conn.prepareStatement(sql);
+
+        // 2 - Set the parameter
+        statement.setInt(1, cinema_id);
+
+        // 3 - Execute/Run the SQL statement and return the resulting row
+        return statement.executeQuery();
     }
 }

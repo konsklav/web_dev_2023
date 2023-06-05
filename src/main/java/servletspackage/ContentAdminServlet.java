@@ -1,6 +1,8 @@
 package servletspackage;
 
+import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
+import cinemamodelpackage.Provoles;
 import helperclasses.DbHelper;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -37,7 +39,6 @@ public class ContentAdminServlet extends HttpServlet {
             case "home":
                 request.setAttribute("dynamicContent", "<div class=\"text\"> " + "<h1> Welcome, " + ca.getName() + "! </h1>\n" + "<h3> Choose an option in the menu on your left! </h3>" + " </div>");
                 break;
-            //
             case "view_all_films":
                 request.setAttribute("dynamicContent", viewAllFilms());
                 break;
@@ -72,7 +73,11 @@ public class ContentAdminServlet extends HttpServlet {
             case "insert_film":
                 handleInsertNewFilm(request, response);
             case "assign_film":
-                handleAssignFilm(request, response);
+                try {
+                    handleAssignFilm(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
         }
     }
 
@@ -117,10 +122,9 @@ public class ContentAdminServlet extends HttpServlet {
 
     private String insertNewFilm() {
         postMode = "insert_film";
-
         // Create form with text fields: Title, Category, Description, Duration
         String html =
-                "<form class='insert_film_form' action=\"content-admin-servlet\" method=\"post\">\n" +
+                "<form class='edit_film_form' action=\"content-admin-servlet\" method=\"post\">\n" +
                 "<label for=\"title\"> Title </label>\n" + "<input type=\"text\" id=\"title\" name=\"title\"><br>\n" +
                     "<label for=\"category\"> Category </label>\n" + "<input type=\"text\" id=\"category\" name=\"category\"><br>\n" +
                     "<label for=\"description\"> Description </label>\n" + "<input type=\"text\" id=\"description\" name=\"description\"><br>\n" +
@@ -158,12 +162,38 @@ public class ContentAdminServlet extends HttpServlet {
 
     private String assignFilm() {
         postMode = "assign_film";
-        //Code to be implemented
-        String html = "html code!";
+        // Create form with text fields: Title, Cinema, Date and Time
+        String html = "<form class='edit_film_form' action=\"content-admin-servlet\" method=\"post\">\n" +
+                        "<label for=\"title\"> Film Title </label>\n" + "<input type=\"text\" id=\"title\" name=\"title\"><br>\n" +
+                        "<label for=\"cinema\"> Cinema ID </label>\n" + "<input type=\"text\" id=\"cinema\" name=\"cinema\"><br>\n" +
+                        "<label for=\"datetime\"> Date and Time </label>\n" + "<input type=\"datetime-local\" id=\"datetime\" name=\"datetime\"><br><br>\n" +
+                        "<input type=\"submit\" value=\"Submit\">" +
+                      "</form>";
         return html;
     }
 
-    private void handleAssignFilm(HttpServletRequest request, HttpServletResponse response) {
-        //Code to be implemented
+    private void handleAssignFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        // 1 -> Get POST parameters
+        String title = request.getParameter("title");
+        int cinema_id = Integer.parseInt(request.getParameter("cinema"));
+        String date_and_time = request.getParameter("datetime");
+        //!!! Στο πάνω αντί για String, να βρούμε τρόπο να παίρνει την ημερομηνία και την ώρα (πιθανώς κάτι σε localdatetime)
+
+        //2 -> Create Films object
+        //!!! Να δούμε πως θα το φτιάξουμε για να το πάρει κάτω στη μέθοδο
+
+        //3 -> Create Cinemas object based on the Cinema fields provided by the ResultSet given from the DbHelper class
+        ResultSet cinemaResults = DbHelper.getCinema(cinema_id);    //Using DbHelper class to get the specific cinema's fields
+        Boolean is_3d = cinemaResults.getBoolean(2);
+        int nr_of_seats = cinemaResults.getInt(3);
+        Cinemas cinema = new Cinemas(cinema_id, is_3d, nr_of_seats);
+
+        // 4 -> Create Provoles object and stores the provoli in the db using the createNewProvoli method from the ContentAdmins class
+            //ca.createNewProvoli();
+            //!!! Στο πάνω να βάλουμε τα ορίσματα και να βγάλουμε το σχόλιο
+
+        // 5 -> Go back to assignFilm's dynamic view
+        request.setAttribute("dynamicContent", assignFilm());
+        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
     }
 }

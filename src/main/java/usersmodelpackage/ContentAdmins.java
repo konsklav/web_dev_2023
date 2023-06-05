@@ -19,8 +19,8 @@ public class ContentAdmins extends Users{
     public void insertFilm(Films filmToBeInserted) throws SQLException {
         //Uses the DbHelper class to insert the film into the db, displays the appropriate message and returns the film that was inserted.
         if (DbHelper.addNewFilm(filmToBeInserted)) {
-            System.out.println
-                    ("Film with title " + filmToBeInserted.getFilmTitle() + " inserted successfully by " + username);
+            System.out.println("Film with title " + filmToBeInserted.getFilmTitle() + " inserted successfully by " + username);
+            //NA GINEI KAPWS ALLIWS, OPWS KAI STA YPOLOIPA
         } else {
             System.out.println("Film failed to insert ");
         }
@@ -34,7 +34,8 @@ public class ContentAdmins extends Users{
 
     public Provoles createNewProvoli(Films film, Cinemas cinema, LocalDateTime startTime) throws SQLException {
         Provoles provoli = new Provoles(film, cinema, startTime);
-        //Will insert this provoli to the db
+        provoli.setProvoliNumberOfReservations(0);
+        //Να φτιάξουμε συνάρτηση στη DbHelper class που να αποθηκεύει την provoli στη βάση.
         System.out.println("Created new provoli!");
         return provoli;
     }
