@@ -46,7 +46,7 @@ public class ContentAdminServlet extends HttpServlet {
                 request.setAttribute("dynamicContent", addProvoli());
                 break;
             case "logout":
-                //Code to be implemented in exercise 2
+                //Code to be implemented in exercise 3
                 break;
         }
 
@@ -71,7 +71,7 @@ public class ContentAdminServlet extends HttpServlet {
                 handleInsertNewFilm(request, response);
             case "add_provoli":
                 try {
-                    handleAssignFilm(request, response);
+                    handleAddProvoli(request, response);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -96,7 +96,7 @@ public class ContentAdminServlet extends HttpServlet {
                 int id = filmResults.getInt(1);
                 String title = filmResults.getString(2);
                 String category = filmResults.getString(3);
-                String description = filmResults.getString(4);
+                String description = filmResults.getString(4); //Variable to be used in exercise 3
                 int duration = filmResults.getInt(5);
                 Duration tempDuration = Duration.ofSeconds(duration);
                 String formattedDuration = String.format("%d:%02d:%02d",
@@ -172,19 +172,20 @@ public class ContentAdminServlet extends HttpServlet {
         return html;
     }
 
-    private void handleAssignFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    private void handleAddProvoli(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         // 1 -> Get POST parameters
         int film_id = Integer.parseInt(request.getParameter("film"));
         int cinema_id = Integer.parseInt(request.getParameter("cinema"));
         LocalDateTime date_and_time = LocalDateTime.parse(request.getParameter("datetime"));
 
+        // 2 -> Execute the createNewProvoli function of the ContentAdmins class
         try {
             ca.createNewProvoli(film_id, cinema_id, date_and_time);
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-        // 5 -> Go back to assignFilm's dynamic view
+        // 3 -> Go back to assignFilm's dynamic view
         request.setAttribute("dynamicContent", addProvoli());
         request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
     }

@@ -20,7 +20,7 @@ public class ContentAdmins extends Users{
         //Uses the DbHelper class to insert the film into the db, displays the appropriate message and returns the film that was inserted.
         if (DbHelper.addNewFilm(filmToBeInserted)) {
             System.out.println("Film with title " + filmToBeInserted.getFilmTitle() + " inserted successfully by " + username);
-            //NA GINEI KAPWS ALLIWS, OPWS KAI STA YPOLOIPA
+            //!!! Σε αυτό, όπως και στα υπόλοιπα (και σε όλες τις κλάσεις), να βρούμε τι θα κάνουμε με το System.out...
         } else {
             System.out.println("Film failed to insert ");
         }
@@ -28,20 +28,22 @@ public class ContentAdmins extends Users{
 
     public Films deleteFilm(Films filmToBeDeleted) throws SQLException {
         //Will delete the film off the db
-        System.out.println("Film deleted succesfully!");
+        System.out.println("Film deleted successfully!");
         return filmToBeDeleted;
     }
 
     public void createNewProvoli(int filmId, int cinemaId, LocalDateTime startTime) throws SQLException {
+        // 1 -> Get the cinema and film objects from the db based in their id's using the DbHelper class
         Cinemas cinema = DbHelper.getCinema(cinemaId);
         Films film = DbHelper.getFilm(filmId);
 
+        // 2 -> Return if the cinema and/or film objects are null (hence the query couldn't find a match with the specific id in the db)
         if (cinema == null || film == null) {
             System.out.println("Couldn't create provoli, because the cinema OR film were not found");
             return;
         }
 
-        //Να φτιάξουμε συνάρτηση στη DbHelper class που να αποθηκεύει την provoli στη βάση.
+        // 3 -> Add the new Provoli object in the db using the DbHelper class
         if (DbHelper.addProvoli(new Provoles(film, cinema, startTime))) {
             System.out.println(getUsername() + " created a new provoli");
         } else {
