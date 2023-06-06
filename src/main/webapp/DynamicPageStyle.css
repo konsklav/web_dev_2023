@@ -206,7 +206,7 @@ nav ul,nav li {
     text-transform: uppercase;
 }
 
-.edit_film_form input[type = "text"],.box2 input[type= "password"]{
+.edit_film_form input[type = "text"]{
     border: 0;
     background: none;
     display: block;
@@ -221,7 +221,7 @@ nav ul,nav li {
     transition: 0.25s;
 }
 
-.edit_film_form input[type = "text"]:focus,.box2 input[type= "password"]:focus{
+.edit_film_form input[type = "text"]:focus{
     width: 280px;
     border-color:#B6DDFF;
 }
