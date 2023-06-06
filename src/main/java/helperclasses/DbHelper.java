@@ -2,9 +2,13 @@ package helperclasses;
 
 import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
+import cinemamodelpackage.Provoles;
+
 import java.lang.annotation.Documented;
 import java.sql.*;
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 //This is a helper class that establishes the connection with the db and implements the key functions that require connection and access to the db
 public class DbHelper {
@@ -33,7 +37,7 @@ public class DbHelper {
     public static ResultSet getAllFilms() throws SQLException {
         connectIfNull();
 
-        String sql = "SELECT title, category, description, duration FROM Films;";
+        String sql = "SELECT id, title, category, description, duration FROM Films;";
         Statement statement = conn.createStatement();
         return statement.executeQuery(sql);
     }
@@ -67,7 +71,7 @@ public class DbHelper {
         return statement.executeUpdate() > 0;
     }
 
-    public static ResultSet getCinema(int cinema_id) throws SQLException{
+    public static Cinemas getCinema(int cinema_id) throws SQLException {
         connectIfNull();
 
         // 1 - Prepare a SELECT statement with ? being the parameter
@@ -77,7 +81,51 @@ public class DbHelper {
         // 2 - Set the parameter
         statement.setInt(1, cinema_id);
 
-        // 3 - Execute/Run the SQL statement and return the resulting row
-        return statement.executeQuery();
+        // 3 - Search for the cinema and create the object
+        ResultSet queryResults = statement.executeQuery();
+        if (queryResults.next()) {
+            int id = queryResults.getInt(1);
+            boolean is_3d = queryResults.getBoolean(2);
+            int nr_of_seats = queryResults.getInt(3);
+            return new Cinemas(id, is_3d, nr_of_seats);
+        }
+
+        return null;
+    }
+
+    public static Films getFilm(int filmId) throws SQLException {
+        connectIfNull();
+
+        // 1 - Prepare SELECT statement
+        String sql = "SELECT * FROM Films WHERE id = ?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+
+        // 2 - Set the parameter
+        statement.setInt(1, filmId);
+
+        // 3 - Search for the film and create the object (IF FOUND)
+        ResultSet queryResults = statement.executeQuery();
+        if (queryResults.next()) {
+            int id = queryResults.getInt(1);
+            String title = queryResults.getString(2);
+            String category = queryResults.getString(3);
+            String description = queryResults.getString(4);
+            int duration = queryResults.getInt(5);
+
+            return new Films(id, title, category, description, Duration.ofSeconds(duration));
+        }
+
+        return null;
+    }
+
+    public static boolean addProvoli(Provoles provoli) throws SQLException {
+        String sql = "INSERT INTO Provoles (film, cinema, start_date, nr_of_reservations) VALUES (?, ?, ?, 0);";
+        PreparedStatement statement = conn.prepareStatement(sql);
+
+        statement.setInt(1, provoli.getProvoliFilm().getFilmId());
+        statement.setInt(2, provoli.getProvoliCinema().getCinemaId());
+        statement.setTimestamp(3, Timestamp.valueOf(provoli.getProvoliStartDate()));
+
+        return statement.executeUpdate() > 0;
     }
 }

@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Provoles (
     "film" INTEGER NOT NULL REFERENCES Films,
     "cinema" INTEGER NOT NULL REFERENCES Cinemas,
     "start_date" TIMESTAMP NOT NULL,
-    "nr_of_reservations" INTEGER NOT NULL CHECK (nr_of_reservations >= 0),
+    "nr_of_reservations" INTEGER NOT NULL CHECK (nr_of_reservations >= 0) DEFAULT 0,
     PRIMARY KEY ("film", "cinema", "start_date")
 );
 

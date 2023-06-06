@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-
 <html>
 <head>
     <link rel="stylesheet" href="DynamicPageStyle.css">
@@ -38,7 +37,7 @@
             </a>
         </li>
         <li class="has-subnav">
-            <a href="content-admin-servlet?option=assign_film">
+            <a href="content-admin-servlet?option=add_provoli">
                 <i class="fa fa-globe fa-2x"></i>
                 <span class="nav-text">
                             Assign film to a screening hall and projection time

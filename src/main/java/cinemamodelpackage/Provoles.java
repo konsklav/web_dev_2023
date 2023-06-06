@@ -27,8 +27,8 @@ public class Provoles {
         return provoliId;
     }
 
-    public String getProvoliFilm() {
-        return provoliFilm.toString();
+    public Films getProvoliFilm() {
+        return provoliFilm;
     }
 
     public Cinemas getProvoliCinema() {

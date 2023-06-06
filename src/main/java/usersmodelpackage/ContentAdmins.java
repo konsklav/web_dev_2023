@@ -32,11 +32,20 @@ public class ContentAdmins extends Users{
         return filmToBeDeleted;
     }
 
-    public Provoles createNewProvoli(Films film, Cinemas cinema, LocalDateTime startTime) throws SQLException {
-        Provoles provoli = new Provoles(film, cinema, startTime);
-        provoli.setProvoliNumberOfReservations(0);
+    public void createNewProvoli(int filmId, int cinemaId, LocalDateTime startTime) throws SQLException {
+        Cinemas cinema = DbHelper.getCinema(cinemaId);
+        Films film = DbHelper.getFilm(filmId);
+
+        if (cinema == null || film == null) {
+            System.out.println("Couldn't create provoli, because the cinema OR film were not found");
+            return;
+        }
+
         //Να φτιάξουμε συνάρτηση στη DbHelper class που να αποθηκεύει την provoli στη βάση.
-        System.out.println("Created new provoli!");
-        return provoli;
+        if (DbHelper.addProvoli(new Provoles(film, cinema, startTime))) {
+            System.out.println(getUsername() + " created a new provoli");
+        } else {
+            System.out.println("Failed to add provoli to database");
+        }
     }
 }

@@ -3,7 +3,7 @@ package cinemamodelpackage;
 import java.time.Duration;
 
 public class Films {
-    private String filmId;
+    private int filmId;
     private String filmTitle;
     private String filmCategory;
     private String filmDescription;
@@ -12,7 +12,7 @@ public class Films {
     public Films() {
     }
 
-    public Films(String filmId, String filmTitle, String filmCategory, String filmDescription, Duration filmDuration) {
+    public Films(int filmId, String filmTitle, String filmCategory, String filmDescription, Duration filmDuration) {
         this.filmId = filmId;
         this.filmTitle = filmTitle;
         this.filmCategory = filmCategory;
@@ -20,7 +20,7 @@ public class Films {
         this.filmDuration = filmDuration;
     }
 
-    public String getFilmId() {
+    public int getFilmId() {
         return filmId;
     }
 
@@ -40,7 +40,7 @@ public class Films {
         return filmDuration;
     }
 
-    public void setFilmId(String filmId) {
+    public void setFilmId(int filmId) {
         this.filmId = filmId;
     }
 
