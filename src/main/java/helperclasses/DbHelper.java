@@ -101,7 +101,7 @@ public class DbHelper {
         return null;
     }
 
-    public static Films getFilm(int filmId) throws SQLException {
+    public static Films getFilm(int film_id) throws SQLException {
         connectIfNull();
 
         // 1 -> Prepare SELECT statement
@@ -109,7 +109,7 @@ public class DbHelper {
         PreparedStatement statement = conn.prepareStatement(sql);
 
         // 2 -> Set the parameter
-        statement.setInt(1, filmId);
+        statement.setInt(1, film_id);
 
         // 3 -> Search for the film and create the object (IF FOUND)
         ResultSet queryResults = statement.executeQuery();
