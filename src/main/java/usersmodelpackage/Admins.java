@@ -1,5 +1,7 @@
 package usersmodelpackage;
 
+import helperclasses.DbHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +13,9 @@ public class Admins extends Users{
         super(name, username, password);
     }
 
-    public void createUser(Users userToBeCreated) {
-        //Inserts the User based on the parameter into the db
+    public boolean createContentAdmin(ContentAdmins ca) {
+        System.out.println("Admin \"" + username + "\" is creating ContentAdmin \"" + ca.username + "\".");
+        return DbHelper.addContentAdmin(ca);
     }
 
     public void updateUser(String username, Users userWithTheNewInformation) {
@@ -20,8 +23,9 @@ public class Admins extends Users{
         //attributes of the userWithTheNewInformation parameter
     }
 
-    public void deleteUser(String username) {
-        //Deletes User from db according to the username parameter
+    public boolean deleteContentAdmin(String username) {
+        System.out.println("Admin \"" + username + "\" is attempting to remove ContentAdmin \"" + username + "\".");
+        return DbHelper.removeContentAdmin(username);
     }
 
     public String searchUser(String username) {

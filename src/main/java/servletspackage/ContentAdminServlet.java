@@ -2,6 +2,7 @@ package servletspackage;
 
 import cinemamodelpackage.Films;
 import helperclasses.DbHelper;
+import helperclasses.ServletHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import usersmodelpackage.ContentAdmins;
 import java.io.IOException;
+import java.rmi.server.ServerCloneException;
 import java.sql.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -34,7 +36,7 @@ public class ContentAdminServlet extends HttpServlet {
         //Sets the appropriate dynamic html code based on that option and stores it in the dynamicContent request attribute
         switch (selectedOption){
             case "home":
-                request.setAttribute("dynamicContent", "<div class=\"text\"> " + "<h1> Welcome, " + ca.getName() + "! </h1>\n" + "<h3> Choose an option in the menu on your left! </h3>" + " </div>");
+                request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ca.getName()));
                 break;
             case "view_all_films":
                 request.setAttribute("dynamicContent", viewAllFilms());
@@ -60,7 +62,7 @@ public class ContentAdminServlet extends HttpServlet {
         if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
             ca = (ContentAdmins) request.getSession().getAttribute("user");
             request.setAttribute("from-login", false);
-            request.setAttribute("dynamicContent", "<div class=\"text\"> " + "<h1> Welcome, " + ca.getName() + "! </h1>\n" + "<h3> Choose an option in the menu on your left! </h3>" + " </div>");
+            request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ca.getName()));
             request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
             return;
         }
@@ -70,11 +72,7 @@ public class ContentAdminServlet extends HttpServlet {
             case "insert_film":
                 handleInsertNewFilm(request, response);
             case "add_provoli":
-                try {
-                    handleAddProvoli(request, response);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                handleAddProvoli(request, response);
         }
     }
 
@@ -134,7 +132,7 @@ public class ContentAdminServlet extends HttpServlet {
         return html;
     }
 
-    private void handleInsertNewFilm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void handleInsertNewFilm(HttpServletRequest request, HttpServletResponse response) {
         // 1 -> Get POST parameters
         String title = request.getParameter("title");
         String category = request.getParameter("category");
@@ -157,7 +155,11 @@ public class ContentAdminServlet extends HttpServlet {
 
         // 4 -> Go back to insertNewFilm's dynamic view
         request.setAttribute("dynamicContent", insertNewFilm());
-        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        try {
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String addProvoli() {
@@ -172,7 +174,7 @@ public class ContentAdminServlet extends HttpServlet {
         return html;
     }
 
-    private void handleAddProvoli(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    private void handleAddProvoli(HttpServletRequest request, HttpServletResponse response) {
         // 1 -> Get POST parameters
         int film_id = Integer.parseInt(request.getParameter("film"));
         int cinema_id = Integer.parseInt(request.getParameter("cinema"));
@@ -187,6 +189,11 @@ public class ContentAdminServlet extends HttpServlet {
         }
         // 3 -> Go back to assignFilm's dynamic view
         request.setAttribute("dynamicContent", addProvoli());
-        request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+
+        try {
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }
