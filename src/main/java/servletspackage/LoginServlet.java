@@ -49,31 +49,24 @@ public class LoginServlet extends HttpServlet {
             System.out.println(ex.getMessage());
         }
 
-        // TEMPORARY:
-        // Every RequestDispatcher redirects to ContentAdminServlet as per the requirements of Exercise 2
-        // In the future, the RequestDispatcher shall redirect to the proper servlet depending on the type of user
-        /*switch (userType) {
+        request.setAttribute("from-login", true);
+        switch (userType) {
             case "CU":
                 Customers cu = new Customers(name, username, password);
                 request.getSession().setAttribute("user", cu);
-                request.getRequestDispatcher("/client-servlet").forward(request, response);
+                request.getRequestDispatcher("/customer-servlet").forward(request, response);
                 break;
-            case "CA":
+            case "AD":
                 Admins ad = new Admins(name, username, password);
                 request.getSession().setAttribute("user", ad);
                 request.getRequestDispatcher("/admin-servlet").forward(request, response);
                 break;
-            case "AD":
+            case "CA":
                 ContentAdmins ca = new ContentAdmins(name, username, password);
                 request.getSession().setAttribute("user", ca);
                 request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
                 break;
                }
-         */
-        ContentAdmins ca = new ContentAdmins(name, username, password);
-        request.getSession().setAttribute("user", ca);
-        request.setAttribute("from-login", true);
-        request.getRequestDispatcher("/content-admin-servlet").forward(request, response);
     }
 
     //Creates a User object based on the username and password inserted and performs the login function. Returns null if the inserted credentials do not match with a users credentials in the db

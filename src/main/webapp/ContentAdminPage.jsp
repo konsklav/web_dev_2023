@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
+    <title>Content Admin Page</title>
     <link rel="stylesheet" href="DynamicPageStyle.css">
     <meta charset="ISO-8859-1">
 </head>
@@ -44,48 +45,6 @@
                 </span>
             </a>
         </li>
-        <!--
-        <li class="has-subnav">
-            <a href="#">
-                <i class="fa fa-camera-retro fa-2x"></i>
-                <span class="nav-text">
-                            Global Surveyors
-                </span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fa fa-book fa-2x"></i>
-                <span class="nav-text">
-                           Surveying Jobs
-                </span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fa fa-cogs fa-2x"></i>
-                <span class="nav-text">
-                            Tools & Resources
-                        </span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fa fa-map-marker fa-2x"></i>
-                <span class="nav-text">
-                            Member Map
-                </span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                <i class="fa fa-info fa-2x"></i>
-                <span class="nav-text">
-                            Documentation
-                </span>
-            </a>
-        </li>
-        -->
     </ul>
     <ul class="logout">
         <li>
