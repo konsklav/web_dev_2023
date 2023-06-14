@@ -26,7 +26,7 @@ public class ContentAdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ContentAdmins ca = (ContentAdmins)request.getSession().getAttribute("user");
+        ca = ca == null ? (ContentAdmins)request.getSession().getAttribute("user") : ca;
 
         //Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
