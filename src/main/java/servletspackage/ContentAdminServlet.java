@@ -31,7 +31,7 @@ public class ContentAdminServlet extends HttpServlet {
         //Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
 
-        //Sets the appropriate dynamic html code based on that option and stores it in the dynamicContent request attribute
+        //Sets the appropriate dynamic html code (using the ServletHelper Class) based on that option and stores it in the dynamicContent request attribute
         switch (selectedOption){
             case "home":
                 request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ca.getName()));

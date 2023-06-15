@@ -4,11 +4,8 @@ import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import cinemamodelpackage.Provoles;
 import usersmodelpackage.ContentAdmins;
-
 import java.sql.*;
 import java.time.Duration;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 //This is a helper class that establishes the connection with the db and implements the key functions that require connection and access to the db
 public class DbHelper {
@@ -195,10 +192,13 @@ public class DbHelper {
         return update(statement) > 0;
     }
 
+    // Adds the specified content admin in the db
     public static boolean addContentAdmin(ContentAdmins ca) {
+        // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
         String sql = "INSERT INTO Users (name, username, password, type) VALUES (?, ?, ?, 'CA')";
         PreparedStatement statement = prepareSql(sql);
 
+        // 2 -> Set the parameters
         try {
             statement.setString(1, ca.getName());
             statement.setString(2, ca.getUsername());
@@ -207,19 +207,23 @@ public class DbHelper {
             e.printStackTrace();
         }
 
+        // 3-> Return true if the row update count is greater than 0
         return update(statement) > 0;
     }
 
     public static boolean removeContentAdmin(String username) {
+        // 1 -> Prepare a DELETE statement with ? being the parameter
         String sql = "DELETE FROM Users WHERE username = ?";
         PreparedStatement statement = prepareSql(sql);
 
+        // 2 -> Sets the parameter
         try {
             statement.setString(1, username);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        // 3-> Return true if the row update count is greater than 0
         return update(statement) > 0;
     }
 }

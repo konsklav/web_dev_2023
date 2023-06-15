@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 
+//This is a helper class that "creates" all dynamic HTML code for all the Servlets
 public class ServletHelper {
     // HTML for all Servlets
     public static String welcomeHtml(String fullName) {

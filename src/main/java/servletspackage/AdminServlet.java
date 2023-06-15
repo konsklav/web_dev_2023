@@ -23,8 +23,11 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ad = ad == null ? (Admins) request.getSession().getAttribute("user") : ad;
 
+        //Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
 
+        //Sets the appropriate dynamic html code (using the ServletHelper Class) based on that option and stores it in the
+        // dynamicContent request attribute
         switch (selectedOption) {
             case "home":
                 request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ad.getName()));
@@ -36,12 +39,16 @@ public class AdminServlet extends HttpServlet {
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.removeContentAdmin());
                 break;
+            case "logout":
+                //Code to be implemented as in all users servlets
+                break;
         }
         request.getRequestDispatcher("AdminPage.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // If the user is redirected from LoginPage.jsp, do the following and return:
         if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
             ad = ad == null ? (Admins) request.getSession().getAttribute("user") : ad;
             request.setAttribute("from-login", false);
@@ -50,6 +57,7 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
+        //Else, based on the postMode attribute, execute the appropriate methods
         switch (postMode) {
             case "add_content_admin":
                 handleAddContentAdmin(request, response);
@@ -61,16 +69,21 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void handleAddContentAdmin(HttpServletRequest request, HttpServletResponse response) {
+        // 1 -> Gets the parameters (name, username and password) off the request sent by the form in AdminPage.jsp
         String name = request.getParameter("name");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        // 2 -> Creates new ContentAdmins object using the parameters from above
         ContentAdmins ca = new ContentAdmins(name, username, password);
+
+        //!!! 3 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
         String status = ad.createContentAdmin(ca) ?
                 "Successfully created ContentAdmin \"" + ca.getUsername() +"\"!" :
                 "Failed to create ContentAdmin \"" + username + "\", check server logs for more info!";
         String statusHtml = "<h2>" + status + "</h2>";
 
+        // 4 -> Sets the new dynamicContent (with the functions statusHtml) and redirects it to the AdminPage.jsp
         request.setAttribute("dynamicContent", ServletHelper.addContentAdmin() + statusHtml);
         try {
             request.getRequestDispatcher("AdminPage.jsp").forward(request, response);
@@ -80,13 +93,16 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void handleRemoveContentAdmin(HttpServletRequest request, HttpServletResponse response) {
+        // 1 -> Gets the username parameter off the request sent by the form in AdminPage.jsp
         String username = request.getParameter("username");
 
+        // 2 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
         String status = ad.deleteContentAdmin(username) ?
                 "Successfully removed ContentAdmin \"" + username + "\"!" :
                 "Failed to remove ContentAdmin \"" +username + "\", check server logs for more info!";
         String statusHtml = "<h2>" + status + "</h2>";
 
+        // 3 -> Sets the new dynamicContent (with the functions statusHtml) and redirects it to the AdminPage.jsp
         request.setAttribute("dynamicContent", ServletHelper.removeContentAdmin() + statusHtml);
         try {
             request.getRequestDispatcher("AdminPage.jsp").forward(request, response);
