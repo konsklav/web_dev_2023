@@ -223,5 +223,3 @@ public class DbHelper {
         return update(statement) > 0;
     }
 }
-
-// Test comment will remove it on the next push
