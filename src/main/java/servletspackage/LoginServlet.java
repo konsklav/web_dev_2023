@@ -1,23 +1,17 @@
 package servletspackage;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.client.Client;
 import usersmodelpackage.Admins;
 import usersmodelpackage.ContentAdmins;
 import usersmodelpackage.Customers;
 import usersmodelpackage.Users;
-import helperclasses.DbHelper;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.CyclicBarrier;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class LoginServlet extends HttpServlet {
@@ -29,6 +23,7 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        // !!!! Να φτιάξουμε από γραμμή 33 μέχρι 51 μόλις φτιάξι ο Tζώρτζης τη βάση
         ResultSet loginResult = performLogin(username, password);
 
         // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp, displaying wrong input warning.
@@ -69,6 +64,7 @@ public class LoginServlet extends HttpServlet {
                }
     }
 
+    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     //Creates a User object based on the username and password inserted and performs the login function. Returns null if the inserted credentials do not match with a users credentials in the db
     private ResultSet performLogin(String username, String password) {
         Users user = new Users(username, password);

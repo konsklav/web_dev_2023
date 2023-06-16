@@ -71,7 +71,6 @@ public class DbHelper {
         return updateCount;
     }
 
-
     public static ResultSet getAllFilms() {
         //Prepare SELECT statement and return the ResultSet
         String sql = "SELECT id, title, category, description, duration FROM Films;";
@@ -79,6 +78,7 @@ public class DbHelper {
         return query(statement);
     }
 
+    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     //Searches the db for a user based on the credentials given as attributes
     public static ResultSet findUser(String username, String password) {
         // 1 -> Prepare a SELECT statement with ? being the parameters for the credentials
@@ -192,6 +192,7 @@ public class DbHelper {
         return update(statement) > 0;
     }
 
+    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     // Adds the specified content admin in the db
     public static boolean addContentAdmin(ContentAdmins ca) {
         // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
@@ -219,6 +220,27 @@ public class DbHelper {
         // 2 -> Sets the parameter
         try {
             statement.setString(1, username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 3-> Return true if the row update count is greater than 0
+        return update(statement) > 0;
+    }
+
+    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
+    // Adds a new customer in the db
+    public static boolean addCustomer(String name, String username, String salt, String hashedPassword){
+        // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
+        String sql = "INSERT INTO Users (name, username, password, type) VALUES (?, ?, ?, 'CU')";
+        PreparedStatement statement = prepareSql(sql);
+
+        // 2 -> Set the parameters
+        try {
+            statement.setString(1, name);
+            statement.setString(2, username);
+            //statement.setString(3, salt);
+            //statement.setString(4, hashedPassword);
         } catch (SQLException e) {
             e.printStackTrace();
         }

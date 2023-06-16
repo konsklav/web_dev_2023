@@ -1,10 +1,13 @@
 package helperclasses;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 
-//This is a helper class that "creates" all dynamic HTML code for all the Servlets
+//This is a helper class that implements methods for all the Servlets
 public class ServletHelper {
     // HTML for all Servlets
     public static String welcomeHtml(String fullName) {
@@ -95,5 +98,27 @@ public class ServletHelper {
                 "<label for=\"datetime\"> Date and Time </label>\n" + "<input type=\"datetime-local\" id=\"datetime\" name=\"datetime\"><br><br>\n" +
                 "<input type=\"submit\" value=\"Submit\">" +
                 "</form>";
+    }
+
+    //Hashes the given password using the specified salt
+    public static String hashPassword(String password, String salt){
+        String hashedPassword = null;
+
+        final String toHash = salt + password + salt;
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException ex) {
+            return "00000000000000000000000000000000";
+        }
+        messageDigest.update(toHash.getBytes(), 0, toHash.length());
+
+        hashedPassword = new BigInteger(1, messageDigest.digest()).toString(16);
+
+        if (hashedPassword.length() < 32) {
+            hashedPassword = "0" + hashedPassword;
+        }
+
+        return hashedPassword.toUpperCase();
     }
 }
