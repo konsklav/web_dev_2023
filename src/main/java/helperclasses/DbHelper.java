@@ -77,6 +77,16 @@ public class DbHelper {
         return query(statement);
     }
 
+    public static ResultSet getAllProvoles() {
+        String sql = "SELECT p.id, f.title, cinema, start_date, nr_of_reservations, nr_of_seats " +
+                    "FROM provoles p " +
+                    "JOIN films f ON p.film = f.id " +
+                    "JOIN cinemas c ON c.id = cinema " +
+                    "ORDER BY p.id ASC;";
+        PreparedStatement statement = prepareSql(sql);
+        return query(statement);
+    }
+
     //Searches the db for a user based on the username given as attribute
     public static ResultSet findUser(String username) {
         // 1 -> Prepare a SELECT statement with ? being the parameter for the username

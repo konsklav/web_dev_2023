@@ -14,10 +14,10 @@ public class HtmlBuilder {
         public void addInput(String type, String label) {
             html += String.format
                     ("<label for=\"%s\">%s: </label><br>\n",
-                            label.toLowerCase(), label);
+                            label.toLowerCase().replaceAll(" ", ""), label);
             html += String.format
                     ("<input type=\"%s\" id=\"%s\" name=\"%s\"><br>\n",
-                            type, label.toLowerCase(), label.toLowerCase());
+                            type, label.toLowerCase().replaceAll(" ", ""), label.toLowerCase().replaceAll(" ", ""));
         }
 
         @Override
@@ -26,12 +26,12 @@ public class HtmlBuilder {
         }
     }
     public class Table {
-        private final String table_css_class = "something";
+        private final String table_css_class = "films_table";
         private String html;    // The HTML representation of the object
         private int columnCount = 0;
 
         public Table(String... columns) {
-            html = "<table>\n<tr>\n";
+            html = String.format("<table class=\"%s\">\n<tr>\n", table_css_class);
             for (String column : columns) {
                 html += "<th>" + column + "</th>\n";
                 columnCount++;
@@ -39,12 +39,21 @@ public class HtmlBuilder {
             html += "</tr>\n";
         }
 
-        public void addRow(String... values) {
+        public void addRow(Object... values) {
             if (values.length != columnCount) return;
 
             html += "<tr>\n";
-            for (String value : values) {
-                html += "<td>" + value + "</td>\n";
+            for (Object value : values) {
+                html += "<td>" + value.toString() + "</td>\n";
+            }
+            html += "</tr>\n";
+        }
+        public void addRowWithClass(String rowClass, Object... values) {
+            if (values.length != columnCount) return;
+
+            html += String.format("<tr class=\"%s\">\n", rowClass);
+            for (Object value : values) {
+                html += "<td>" + value.toString() + "</td>\n";
             }
             html += "</tr>\n";
         }

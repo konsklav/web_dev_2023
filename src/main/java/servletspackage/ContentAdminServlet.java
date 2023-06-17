@@ -39,6 +39,9 @@ public class ContentAdminServlet extends HttpServlet {
             case "view_all_films":
                 request.setAttribute("dynamicContent", ServletHelper.viewAllFilms());
                 break;
+            case "view_all_provoles":
+                request.setAttribute("dynamicContent", ServletHelper.viewAllProvoles());
+                break;
             case "insert_film":
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.insertNewFilm());
@@ -50,6 +53,7 @@ public class ContentAdminServlet extends HttpServlet {
             case "remove_film":
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.removeFilm());
+                break;
             case "add_provoli":
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.addProvoli());
@@ -61,6 +65,7 @@ public class ContentAdminServlet extends HttpServlet {
             case "remove_provoli":
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.removeProvoli());
+                break;
             case "logout":
                 //Code to be implemented in exercise 3
                 break;

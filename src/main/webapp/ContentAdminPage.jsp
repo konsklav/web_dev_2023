@@ -29,9 +29,17 @@
                 </span>
             </a>
         </li>
+        <li>
+            <a href="content-admin-servlet?option=view_all_provoles">
+                <i class="fa fa-video-camera fa-2x"></i>
+                <span class="nav-text">
+                            View all available screenings
+                </span>
+            </a>
+        </li>
         <li class="has-subnav">
             <a href="content-admin-servlet?option=insert_film">
-                <i class="fa fa-plus"></i>
+                <i class="fa fa-plus fa-2x"></i>
                 <span class="nav-text">
                             Add a new film
                 </span>
@@ -55,7 +63,7 @@
         </li>
         <li class="has-subnav">
             <a href="content-admin-servlet?option=add_provoli">
-                <i class="fa fa-video-camera fa-2x"></i>
+                <i class="fa fa-plus fa-2x"></i>
                 <span class="nav-text">
                             Add a new screening
                 </span>
