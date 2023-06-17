@@ -1,7 +1,6 @@
 package servletspackage;
 
 import helperclasses.HashHelper;
-import helperclasses.ServletHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +24,6 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // !!!! Να φτιάξουμε από γραμμή 33 μέχρι 51 μόλις φτιάξι ο Tζώρτζης τη βάση
         ResultSet loginResult = performLogin(username, password);
 
         // If the user enters incorrect credentials (the query returns null to the ResultSet), redirect them back to LoginPage.jsp, displaying wrong input warning.
@@ -46,7 +44,10 @@ public class LoginServlet extends HttpServlet {
             System.out.println(ex.getMessage());
         }
 
+        //Sets a request attribute (from-login) to true, in order to indicate that the redirection to the servlet (and later to the page) "came" from the login page
         request.setAttribute("from-login", true);
+
+
         switch (userType) {
             case "CU":
                 Customers cu = new Customers(name, username, password);
@@ -66,7 +67,6 @@ public class LoginServlet extends HttpServlet {
                }
     }
 
-    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     //Creates a User object based on the username and password inserted and performs the login function. Returns null if the inserted credentials do not match with a users credentials in the db
     private ResultSet performLogin(String username, String password) {
         Users user = new Users(username, password);
@@ -74,8 +74,8 @@ public class LoginServlet extends HttpServlet {
         try {
             ResultSet userQuery = user.login();
             if (userQuery.next()) {     //If true, the query returned a result, thus the credentials validate through the db
-                String salt = userQuery.getString(4);
-                String storedHash = userQuery.getString(5);
+                String salt = userQuery.getString(4);   //Gets the stored salt from the db
+                String storedHash = userQuery.getString(5); //Gets the stored hashedPassword from the db
                 if (!storedHash.equals(HashHelper.hashPassword(password, salt))) {
                     return null;
                 }
@@ -90,13 +90,5 @@ public class LoginServlet extends HttpServlet {
         }
 
         return null;
-    }
-
-    // Process the retrieved (from HTTP Post) password:
-    // -> Hash the (salt + password + salt) string
-    // -> Compare the hashed string to the "hash" value from the DB
-    private boolean performHashCheck(String password, String salt, String storedHash) {
-        String hashedPassword = HashHelper.hashPassword(password, salt);
-        return hashedPassword.equals(storedHash);
     }
 }

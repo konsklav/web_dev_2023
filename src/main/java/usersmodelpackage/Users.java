@@ -47,7 +47,6 @@ public class Users {
         this.password = password;
     }
 
-    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     // Accesses DB and queries the "Users" table for the (username, password) combination
     public ResultSet login() {
         return DbHelper.findUser(username);

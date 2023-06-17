@@ -7,9 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import usersmodelpackage.Customers;
-
 import java.io.IOException;
-import java.util.Random;
 
 @WebServlet(name = "signupServlet", value = "/signup-servlet")
 public class SignupServlet extends HttpServlet {
@@ -30,8 +28,11 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        // Adds the new user (customer) in the db using the addCustomer method of the DbHelper class
+        // Adds the new user (customer) in the db using the addCustomer method of the DbHelper class and dispatches to the customer-servlet if the insertion was successful
         Customers cu = new Customers(full_name, username, password);
-        DbHelper.addCustomer(cu);
+        if(AddUserHelper.addCustomer(cu)) {
+            request.getSession().setAttribute("user", cu);
+            request.getRequestDispatcher("/customer-servlet").forward(request, response);
+        }
     }
 }

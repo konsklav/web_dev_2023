@@ -3,10 +3,6 @@ package helperclasses;
 import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import cinemamodelpackage.Provoles;
-import usersmodelpackage.Admins;
-import usersmodelpackage.ContentAdmins;
-import usersmodelpackage.Customers;
-
 import java.sql.*;
 import java.time.Duration;
 
@@ -81,14 +77,13 @@ public class DbHelper {
         return query(statement);
     }
 
-    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
-    //Searches the db for a user based on the credentials given as attributes
+    //Searches the db for a user based on the username given as attribute
     public static ResultSet findUser(String username) {
-        // 1 -> Prepare a SELECT statement with ? being the parameters for the credentials
-        String sql = "SELECT * FROM Users WHERE username = ?";
+        // 1 -> Prepare a SELECT statement with ? being the parameter for the username
+        String sql = "SELECT * FROM Users WHERE username = ?;";
         PreparedStatement statement = prepareSql(sql);
 
-        // 2 -> Set the parameters
+        // 2 -> Set the parameter
         try {
             statement.setString(1, username);
         } catch (SQLException e) {
@@ -102,7 +97,7 @@ public class DbHelper {
     //Adds a film (given as the attribute) into the db
     public static boolean addNewFilm(Films film) {
         // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
-        String sql = "INSERT INTO Films (title, category, description, duration) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Films (title, category, description, duration) VALUES (?, ?, ?, ?);";
         PreparedStatement statement = prepareSql(sql);
 
         // 2 -> Set the parameters
@@ -147,9 +142,8 @@ public class DbHelper {
     }
 
     public static Films getFilm(int film_id) {
-
         // 1 -> Prepare SELECT statement
-        String sql = "SELECT * FROM Films WHERE id = ?";
+        String sql = "SELECT * FROM Films WHERE id = ?;";
         PreparedStatement statement = prepareSql(sql);
 
         // 2 -> Set the parameter
@@ -176,7 +170,6 @@ public class DbHelper {
 
     //Adds a provoli (given as the attribute) into the db
     public static boolean addProvoli(Provoles provoli) {
-
         // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
         String sql = "INSERT INTO Provoles (film, cinema, start_date, nr_of_reservations) VALUES (?, ?, ?, 0);";
         PreparedStatement statement = prepareSql(sql);
@@ -194,10 +187,10 @@ public class DbHelper {
         return update(statement) > 0;
     }
 
-    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
+    //Removes the specified content admin off the db
     public static boolean removeContentAdmin(String username) {
         // 1 -> Prepare a DELETE statement with ? being the parameter
-        String sql = "DELETE FROM Users WHERE username = ?";
+        String sql = "DELETE FROM Users WHERE username = ?;";
         PreparedStatement statement = prepareSql(sql);
 
         // 2 -> Sets the parameter
@@ -211,10 +204,10 @@ public class DbHelper {
         return update(statement) > 0;
     }
 
-    private static boolean addUser(String userType, String name, String username, String salt, String hashedPassword) {
+    //Key method that adds a User (of any type) in the db
+    public static boolean addUser(String userType, String name, String username, String salt, String hashedPassword) {
         // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
-        String sql = "INSERT INTO Users (name, username, salt, hash, type)" +
-                "VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO Users (name, username, salt, hash, type) VALUES (?, ?, ?, ?, ?);";
         PreparedStatement statement = prepareSql(sql);
 
         // 2 -> Set the parameters
@@ -230,39 +223,5 @@ public class DbHelper {
 
         // 3 -> Return true if the row update count is greater than 0
         return update(statement) > 0;
-    }
-
-    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
-    // Adds a new customer in the db
-    public static boolean addCustomer(Customers cu) {
-        String name = cu.getName();
-        String username = cu.getUsername();
-        String plainPassword = cu.getPassword();
-
-        String salt = HashHelper.generateSalt();
-        String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
-
-        return addUser("CU", name, username, salt, hashedPassword);
-    }
-    // Adds the specified content admin in the db
-    public static boolean addContentAdmin(ContentAdmins ca) {
-        String name = ca.getName();
-        String username = ca.getUsername();
-        String plainPassword = ca.getPassword();
-
-        String salt = HashHelper.generateSalt();
-        String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
-        return addUser("CA", name, username, salt, hashedPassword);
-    }
-
-    // Adds the specific admin in the db
-    public static boolean addAdmin(Admins ad) {
-        String name = ad.getName();
-        String username = ad.getUsername();
-        String plainPassword = ad.getPassword();
-
-        String salt = HashHelper.generateSalt();
-        String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
-        return addUser("AD", name, username, salt, hashedPassword);
     }
 }

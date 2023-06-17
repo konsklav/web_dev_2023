@@ -5,18 +5,19 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-public class HashHelper
-{
-    // Generates random salt based on the length provided and returns it to the method call
+// This is a helper class that implements methods that help with the salting and hashing of the passwords
+public class HashHelper {
+    // Generates random String for the salt based on a random length and returns it to the method call
     public static String generateSalt(){
         String salt = null;
-        SecureRandom r = new SecureRandom();
+
         // Generate random number between 0 and 45 and add 5 (final number: [5, 50])
+        SecureRandom r = new SecureRandom();
         int length = r.nextInt(46) + 5;
 
-        // Generates random String
+        // Generates random String for the salt
         StringBuilder sb = new StringBuilder(length);
-        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$&()";
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$&()";    //Characters that will be included in the salt
         SecureRandom r2 = new SecureRandom();
 
         for (int i = 0; i < length; i++) {
@@ -29,7 +30,7 @@ public class HashHelper
         return salt;
     }
 
-    //Hashes the given password using the specified salt
+    // Hashes the given password using the specified salt
     public static String hashPassword(String password, String salt){
         String hashedPassword = null;
 

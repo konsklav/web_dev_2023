@@ -1,6 +1,7 @@
 package usersmodelpackage;
 
 import helperclasses.DbHelper;
+import helperclasses.AddUserHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class Admins extends Users{
 
     public boolean createContentAdmin(ContentAdmins ca) {
         System.out.println("Admin \"" + username + "\" is creating ContentAdmin \"" + ca.username + "\".");
-        return DbHelper.addContentAdmin(ca);
+        return AddUserHelper.addContentAdmin(ca);
     }
 
     public void updateUser(String username, Users userWithTheNewInformation) {

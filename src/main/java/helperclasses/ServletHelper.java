@@ -1,14 +1,10 @@
 package helperclasses;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 
-//This is a helper class that implements methods for all the Servlets
+//This is a helper class that implements methods for generating all the dynamic HTML code for all the Servlets
 public class ServletHelper {
     // HTML for all Servlets
     public static String welcomeHtml(String fullName) {
