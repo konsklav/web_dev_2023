@@ -3,6 +3,7 @@ package helperclasses;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -100,6 +101,25 @@ public class ServletHelper {
                 "</form>";
     }
 
+    // Generates random salt based on the length provided and returns it to the method call
+    public static String generateSalt(int length){
+        String salt = null;
+
+        // Generates random String
+        StringBuilder sb = new StringBuilder(length);
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$&()";
+        SecureRandom r2 = new SecureRandom();
+
+        for (int i = 0; i < length; i++) {
+            int randomIndex = r2.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        salt = sb.toString();
+        return salt;
+    }
+
     //Hashes the given password using the specified salt
     public static String hashPassword(String password, String salt){
         String hashedPassword = null;
@@ -119,6 +139,6 @@ public class ServletHelper {
             hashedPassword = "0" + hashedPassword;
         }
 
-        return hashedPassword.toUpperCase();
+        return hashedPassword;
     }
 }

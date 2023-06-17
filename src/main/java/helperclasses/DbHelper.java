@@ -82,13 +82,12 @@ public class DbHelper {
     //Searches the db for a user based on the credentials given as attributes
     public static ResultSet findUser(String username, String password) {
         // 1 -> Prepare a SELECT statement with ? being the parameters for the credentials
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?;";
+        String sql = "SELECT * FROM Users WHERE username = ?";
         PreparedStatement statement = prepareSql(sql);
 
         // 2 -> Set the parameters
         try {
             statement.setString(1, username);
-            statement.setString(2, password);
         } catch (SQLException e) {
             e.printStackTrace();
         }
