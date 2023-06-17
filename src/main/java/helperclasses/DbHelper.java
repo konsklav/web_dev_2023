@@ -3,7 +3,10 @@ package helperclasses;
 import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import cinemamodelpackage.Provoles;
+import usersmodelpackage.Admins;
 import usersmodelpackage.ContentAdmins;
+import usersmodelpackage.Customers;
+
 import java.sql.*;
 import java.time.Duration;
 
@@ -80,7 +83,7 @@ public class DbHelper {
 
     // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     //Searches the db for a user based on the credentials given as attributes
-    public static ResultSet findUser(String username, String password) {
+    public static ResultSet findUser(String username) {
         // 1 -> Prepare a SELECT statement with ? being the parameters for the credentials
         String sql = "SELECT * FROM Users WHERE username = ?";
         PreparedStatement statement = prepareSql(sql);
@@ -192,25 +195,6 @@ public class DbHelper {
     }
 
     // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
-    // Adds the specified content admin in the db
-    public static boolean addContentAdmin(ContentAdmins ca) {
-        // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
-        String sql = "INSERT INTO Users (name, username, password, type) VALUES (?, ?, ?, 'CA')";
-        PreparedStatement statement = prepareSql(sql);
-
-        // 2 -> Set the parameters
-        try {
-            statement.setString(1, ca.getName());
-            statement.setString(2, ca.getUsername());
-            statement.setString(3, ca.getPassword());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // 3-> Return true if the row update count is greater than 0
-        return update(statement) > 0;
-    }
-
     public static boolean removeContentAdmin(String username) {
         // 1 -> Prepare a DELETE statement with ? being the parameter
         String sql = "DELETE FROM Users WHERE username = ?";
@@ -227,24 +211,58 @@ public class DbHelper {
         return update(statement) > 0;
     }
 
-    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
-    // Adds a new customer in the db
-    public static boolean addCustomer(String name, String username, String salt, String hashedPassword){
+    private static boolean addUser(String userType, String name, String username, String salt, String hashedPassword) {
         // 1 -> Prepare an INSERT statement with ? being the parameters for the fields
-        String sql = "INSERT INTO Users (name, username, password, type) VALUES (?, ?, ?, 'CU')";
+        String sql = "INSERT INTO Users (name, username, salt, hash, type)" +
+                "VALUES (?, ?, ?, ?, ?);";
         PreparedStatement statement = prepareSql(sql);
 
         // 2 -> Set the parameters
         try {
             statement.setString(1, name);
             statement.setString(2, username);
-            //statement.setString(3, salt);
-            //statement.setString(4, hashedPassword);
+            statement.setString(3, salt);
+            statement.setString(4, hashedPassword);
+            statement.setString(5, userType);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // 3-> Return true if the row update count is greater than 0
+        // 3 -> Return true if the row update count is greater than 0
         return update(statement) > 0;
+    }
+
+    // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
+    // Adds a new customer in the db
+    public static boolean addCustomer(Customers cu) {
+        String name = cu.getName();
+        String username = cu.getUsername();
+        String plainPassword = cu.getPassword();
+
+        String salt = HashHelper.generateSalt();
+        String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
+
+        return addUser("CU", name, username, salt, hashedPassword);
+    }
+    // Adds the specified content admin in the db
+    public static boolean addContentAdmin(ContentAdmins ca) {
+        String name = ca.getName();
+        String username = ca.getUsername();
+        String plainPassword = ca.getPassword();
+
+        String salt = HashHelper.generateSalt();
+        String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
+        return addUser("CA", name, username, salt, hashedPassword);
+    }
+
+    // Adds the specific admin in the db
+    public static boolean addAdmin(Admins ad) {
+        String name = ad.getName();
+        String username = ad.getUsername();
+        String plainPassword = ad.getPassword();
+
+        String salt = HashHelper.generateSalt();
+        String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
+        return addUser("AD", name, username, salt, hashedPassword);
     }
 }

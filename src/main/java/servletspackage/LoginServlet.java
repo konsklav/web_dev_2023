@@ -1,5 +1,7 @@
 package servletspackage;
 
+import helperclasses.HashHelper;
+import helperclasses.ServletHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,7 +41,7 @@ public class LoginServlet extends HttpServlet {
         //Gets these fields off the db from the result of the query
         try {
             name = loginResult.getString(2);
-            userType = loginResult.getString(5);
+            userType = loginResult.getString(6);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
@@ -72,6 +74,11 @@ public class LoginServlet extends HttpServlet {
         try {
             ResultSet userQuery = user.login();
             if (userQuery.next()) {     //If true, the query returned a result, thus the credentials validate through the db
+                String salt = userQuery.getString(4);
+                String storedHash = userQuery.getString(5);
+                if (!storedHash.equals(HashHelper.hashPassword(password, salt))) {
+                    return null;
+                }
                 return userQuery;
             }
             else {
@@ -83,5 +90,13 @@ public class LoginServlet extends HttpServlet {
         }
 
         return null;
+    }
+
+    // Process the retrieved (from HTTP Post) password:
+    // -> Hash the (salt + password + salt) string
+    // -> Compare the hashed string to the "hash" value from the DB
+    private boolean performHashCheck(String password, String salt, String storedHash) {
+        String hashedPassword = HashHelper.hashPassword(password, salt);
+        return hashedPassword.equals(storedHash);
     }
 }

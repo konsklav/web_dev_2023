@@ -6,8 +6,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import usersmodelpackage.Customers;
+
 import java.io.IOException;
-import java.security.SecureRandom;
+import java.util.Random;
 
 @WebServlet(name = "signupServlet", value = "/signup-servlet")
 public class SignupServlet extends HttpServlet {
@@ -28,15 +30,8 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        // Generates random salt using the generateSalt method and a random length value for it's length
-        SecureRandom r1 = new SecureRandom();
-        int length = r1.nextInt(45) + 5;
-        String salt = ServletHelper.generateSalt(length);
-
-        // Hashes the password using the hashPasswordMethod of the ServletHelper class
-        String hashedPassword = ServletHelper.hashPassword(password, salt);
-
         // Adds the new user (customer) in the db using the addCustomer method of the DbHelper class
-        DbHelper.addCustomer(full_name, username, salt, hashedPassword);
+        Customers cu = new Customers(full_name, username, password);
+        DbHelper.addCustomer(cu);
     }
 }

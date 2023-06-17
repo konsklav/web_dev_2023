@@ -50,7 +50,7 @@ public class Users {
     // !!!! Να τη φτιάξουμε μόλις φτιάξι ο Tζώρτζης τη βάση
     // Accesses DB and queries the "Users" table for the (username, password) combination
     public ResultSet login() {
-        return DbHelper.findUser(username, password);
+        return DbHelper.findUser(username);
     }
 
     public void logout() {
