@@ -31,17 +31,49 @@
         </li>
         <li class="has-subnav">
             <a href="content-admin-servlet?option=insert_film">
-                <i class="fa fa-plus fa-2x"></i>
+                <i class="fa fa-plus"></i>
                 <span class="nav-text">
                             Add a new film
                 </span>
             </a>
         </li>
         <li class="has-subnav">
-            <a href="content-admin-servlet?option=add_provoli">
-                <i class="fa fa-globe fa-2x"></i>
+            <a href="content-admin-servlet?option=edit_film">
+                <i class="fa fa-edit fa-2x"></i>
                 <span class="nav-text">
-                            Assign film to a screening hall and projection time
+                            Edit an existing film
+                </span>
+            </a>
+        </li>
+        <li class="has-subnav">
+            <a href="content-admin-servlet?option=remove_film">
+                <i class="fa fa-minus fa-2x"></i>
+                <span class="nav-text">
+                            Remove a film
+                </span>
+            </a>
+        </li>
+        <li class="has-subnav">
+            <a href="content-admin-servlet?option=add_provoli">
+                <i class="fa fa-video-camera fa-2x"></i>
+                <span class="nav-text">
+                            Add a new screening
+                </span>
+            </a>
+        </li>
+        <li class="has-subnav">
+            <a href="content-admin-servlet?option=edit_provoli">
+                <i class="fa fa-edit fa-2x"></i>
+                <span class="nav-text">
+                            Edit an existing screening
+                </span>
+            </a>
+        </li>
+        <li class="has-subnav">
+            <a href="content-admin-servlet?option=remove_provoli">
+                <i class="fa fa-minus fa-2x"></i>
+                <span class="nav-text">
+                            Remove a screening
                 </span>
             </a>
         </li>

@@ -43,10 +43,24 @@ public class ContentAdminServlet extends HttpServlet {
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.insertNewFilm());
                 break;
+            case "edit_film":
+                postMode = selectedOption;
+                request.setAttribute("dynamicContent", ServletHelper.editFilm());
+                break;
+            case "remove_film":
+                postMode = selectedOption;
+                request.setAttribute("dynamicContent", ServletHelper.removeFilm());
             case "add_provoli":
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.addProvoli());
                 break;
+            case "edit_provoli":
+                postMode = selectedOption;
+                request.setAttribute("dynamicContent", ServletHelper.editProvoli());
+                break;
+            case "remove_provoli":
+                postMode = selectedOption;
+                request.setAttribute("dynamicContent", ServletHelper.removeProvoli());
             case "logout":
                 //Code to be implemented in exercise 3
                 break;
@@ -71,9 +85,29 @@ public class ContentAdminServlet extends HttpServlet {
         switch (postMode) {
             case "insert_film":
                 handleInsertNewFilm(request, response);
+            case "edit_film":
+                handleEditFilm(request, response);
+            case "remove_film":
+                handleRemoveFilm(request, response);
             case "add_provoli":
                 handleAddProvoli(request, response);
+            case "edit_provoli":
+                handleEditProvoli(request, response);
+            case "remove_provoli":
+                handleRemoveProvoli(request, response);
         }
+    }
+
+    private void handleRemoveProvoli(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private void handleEditProvoli(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private void handleRemoveFilm(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    private void handleEditFilm(HttpServletRequest request, HttpServletResponse response) {
     }
 
     private void handleInsertNewFilm(HttpServletRequest request, HttpServletResponse response) {

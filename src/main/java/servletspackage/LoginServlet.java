@@ -47,18 +47,19 @@ public class LoginServlet extends HttpServlet {
         //Sets a request attribute (from-login) to true, in order to indicate that the redirection to the servlet (and later to the page) "came" from the login page
         request.setAttribute("from-login", true);
 
-
         switch (userType) {
-            case "CU":
-                Customers cu = new Customers(name, username, password);
-                request.getSession().setAttribute("user", cu);
-                request.getRequestDispatcher("/customer-servlet").forward(request, response);
-                break;
+//            case "CU":
+//                Customers cu = new Customers(name, username, password);
+//                request.getSession().setAttribute("user", cu);
+//                request.getRequestDispatcher("/customer-servlet").forward(request, response);
+//                break;
+//            case "AD":
+//                Admins ad = new Admins(name, username, password);
+//                request.getSession().setAttribute("user", ad);
+//                request.getRequestDispatcher("/admin-servlet").forward(request, response);
+//                break;
             case "AD":
-                Admins ad = new Admins(name, username, password);
-                request.getSession().setAttribute("user", ad);
-                request.getRequestDispatcher("/admin-servlet").forward(request, response);
-                break;
+            case "CU":
             case "CA":
                 ContentAdmins ca = new ContentAdmins(name, username, password);
                 request.getSession().setAttribute("user", ca);
