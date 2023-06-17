@@ -48,10 +48,10 @@ public class HtmlBuilder {
             }
             html += "</tr>\n";
         }
-        public void addRowWithClass(String rowClass, Object... values) {
+        public void addRowWithStyle(String rowStyle, Object... values) {
             if (values.length != columnCount) return;
 
-            html += String.format("<tr class=\"%s\">\n", rowClass);
+            html += String.format("<tr style=\"%s\">\n", rowStyle);
             for (Object value : values) {
                 html += "<td>" + value.toString() + "</td>\n";
             }

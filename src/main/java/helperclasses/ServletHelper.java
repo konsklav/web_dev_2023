@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 //This is a helper class that implements methods for generating all the dynamic HTML code for all the Servlets
 public class ServletHelper {
@@ -61,13 +60,13 @@ public class ServletHelper {
                 int availableSeats = nr_of_seats - nr_of_rsrv;
 
                 if (availableSeats == 0) {
-                    provolesTable.addRowWithClass("prov_no_seats", id, film, cinema_id, start_date, availableSeats);
+                    provolesTable.addRowWithStyle("background: #ff3047;", id, film, cinema_id, start_date, availableSeats);
                 }
                 else if (availableSeats <= nr_of_seats / 2) {
-                    provolesTable.addRowWithClass("prov_lim_seats", id, film, cinema_id, start_date, availableSeats);
+                    provolesTable.addRowWithStyle("background: #ffb816;", id, film, cinema_id, start_date, availableSeats);
                 }
                 else if (availableSeats > nr_of_seats / 2) {
-                    provolesTable.addRowWithClass("prov_many_seats", id, film, cinema_id, start_date, availableSeats);
+                    provolesTable.addRowWithStyle("background: #39ff39;", id, film, cinema_id, start_date, availableSeats);
                 }
             }
         } catch (SQLException e) {
@@ -79,22 +78,19 @@ public class ServletHelper {
 
     // Admin-specific HTML
     public static String addContentAdmin() {
-        return "<form action=\"admin-servlet\" method=\"post\">" +
-                "<label for=\"name\">Full Name: </label>" +
-                "<input type=\"text\" id=\"name\" name=\"name\"><br>" +
-                "<label for=\"username\">Username: </label>" +
-                "<input type=\"text\" id=\"username\" name=\"username\"><br>" +
-                "<label for=\"password\">Password: </label>" +
-                "<input type=\"text\" id=\"password\" name=\"password\"><br>" +
-                "<input type=\"submit\" value=\"Submit\">" +
-                "</form>";
+        HtmlBuilder.Form addCaForm = htmlBuilder.new Form("admin-servlet");
+        addCaForm.addInput("text", "Full Name");
+        addCaForm.addInput("text", "Username");
+        addCaForm.addInput("password", "Password");
+
+        return addCaForm.toString();
     }
 
     public static String removeContentAdmin() {
-        return "<form action=\"admin-servlet\" method=\"post\">" +
-                "<label for=\"username\"> Search by username: </label>" +
-                "<input type=\"text\" id=\"username\" name=\"username\">" +
-                "</form>";
+        HtmlBuilder.Form removeCaForm = htmlBuilder.new Form("admin-servlet");
+        removeCaForm.addInput("text", "Username");
+
+        return removeCaForm.toString();
     }
 
     // ContentAdmin-specific HTML

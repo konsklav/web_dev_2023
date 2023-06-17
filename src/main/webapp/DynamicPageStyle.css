@@ -246,16 +246,6 @@ nav ul,nav li {
     color: black;
 }
 
-.prov_no_seats {
-    background: #ff3047;
-}
-.prov_lim_seats {
-    background: #ffb816;
-}
-.prov_many_seats {
-    background: #39ff39;
-}
-
 body{
     background: lightgrey;
 }
