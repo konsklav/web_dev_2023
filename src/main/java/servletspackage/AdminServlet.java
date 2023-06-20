@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import usersmodelpackage.Admins;
 import usersmodelpackage.ContentAdmins;
-
 import java.io.IOException;
 
 @WebServlet(name = "AdminServlet", value = "/admin-servlet")
@@ -23,11 +22,11 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ad = ad == null ? (Admins) request.getSession().getAttribute("user") : ad;
 
-        //Gets the option the user selected in the menu
+        // Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
 
-        //Sets the appropriate dynamic html code (using the ServletHelper Class) based on that option and stores it in the
-        // dynamicContent request attribute
+        // Sets the appropriate dynamic html code (using the ServletHelper Class) based on that option and stores it in the dynamicContent request attribute.
+        // Also calls the logout method of the Users class in the appropriate case
         switch (selectedOption) {
             case "home":
                 request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ad.getName()));
@@ -40,7 +39,7 @@ public class AdminServlet extends HttpServlet {
                 request.setAttribute("dynamicContent", ServletHelper.removeContentAdmin());
                 break;
             case "logout":
-                //Code to be implemented as in all users servlets
+                ad.logout(request, response);
                 break;
         }
         request.getRequestDispatcher("AdminPage.jsp").forward(request, response);
@@ -57,7 +56,7 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
-        //Else, based on the postMode attribute, execute the appropriate methods
+        // Else, based on the postMode attribute, execute the appropriate methods
         switch (postMode) {
             case "add_content_admin":
                 handleAddContentAdmin(request, response);
@@ -74,7 +73,7 @@ public class AdminServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // 2 -> Creates new ContentAdmins object using the parameters from above
+        // 2 -> Creates a new ContentAdmins object using the parameters from above
         ContentAdmins ca = new ContentAdmins(name, username, password);
 
         //!!! 3 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
@@ -96,7 +95,7 @@ public class AdminServlet extends HttpServlet {
         // 1 -> Gets the username parameter off the request sent by the form in AdminPage.jsp
         String username = request.getParameter("username");
 
-        // 2 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
+        //!!! 2 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
         String status = ad.deleteContentAdmin(username) ?
                 "Successfully removed ContentAdmin \"" + username + "\"!" :
                 "Failed to remove ContentAdmin \"" +username + "\", check server logs for more info!";

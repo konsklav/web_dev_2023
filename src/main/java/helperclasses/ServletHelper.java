@@ -1,19 +1,36 @@
 package helperclasses;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Duration;
 
-//This is a helper class that implements methods for generating all the dynamic HTML code for all the Servlets
+//This is a helper class that implements methods for generating all the dynamic HTML code and other key functions for all the Servlets
 public class ServletHelper {
     private static HtmlBuilder htmlBuilder = new HtmlBuilder();
 
-    // HTML for all Servlets
+    // Methods for all Servlets
     public static String welcomeHtml(String fullName) {
         return "<div class=\"text\"> " + "<h1> Welcome, " + fullName + "! </h1>\n"
                 + "<h3> Choose an option in the menu on your left! </h3>" + " </div>";
     }
+
+    public static void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 1 -> Invalidates the session
+        request.getSession().invalidate();
+
+        // 2 -> Clears the cache, setting different headers for compatibility with all HTTP versions and caching mechanisms
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setHeader("Expires", "0"); // Proxies.
+
+        // 3 -> Redirects back to the Login Page upon successful logout
+        response.sendRedirect("LoginPage.jsp");
+    }
+
     public static String viewAllFilms() {
         // 1 -> Initialize table HTML
         HtmlBuilder.Table filmsTable = htmlBuilder.new Table("ID", "Title", "Category", "Duration");
@@ -44,6 +61,7 @@ public class ServletHelper {
         // 4 -> Return the html string
         return filmsTable.toString();
     }
+
     public static String viewAllProvoles() {
         HtmlBuilder.Table provolesTable = htmlBuilder.new Table("ID", "Film", "Cinema", "Start Date", "Seats Available");
         try {
@@ -76,7 +94,7 @@ public class ServletHelper {
         return provolesTable.toString();
     }
 
-    // Admin-specific HTML
+    // Admin-specific methods
     public static String addContentAdmin() {
         HtmlBuilder.Form addCaForm = htmlBuilder.new Form("admin-servlet");
         addCaForm.addInput("text", "Full Name");
@@ -93,7 +111,7 @@ public class ServletHelper {
         return removeCaForm.toString();
     }
 
-    // ContentAdmin-specific HTML
+    // ContentAdmin-specific methods
     public static String insertNewFilm() {
         // Create form with text fields: Title, Category, Description, Duration
         HtmlBuilder.Form insertFilmForm = htmlBuilder.new Form("content-admin-servlet");
@@ -149,4 +167,6 @@ public class ServletHelper {
 
         return removeProvoliForm.toString();
     }
+
+    // Customer-specific methods
 }

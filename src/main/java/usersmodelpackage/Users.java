@@ -1,7 +1,10 @@
 package usersmodelpackage;
 
 import helperclasses.DbHelper;
-
+import helperclasses.ServletHelper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.*;
 
 public class Users {
@@ -52,7 +55,8 @@ public class Users {
         return DbHelper.findUser(username);
     }
 
-    public void logout() {
-        System.out.println(username + " has logged out!");
+    // Calls the logout method of the ServletHelper class providing it with the request and response of the page it was triggered by
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ServletHelper.logout(request, response);
     }
 }

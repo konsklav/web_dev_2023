@@ -28,10 +28,11 @@ public class ContentAdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ca = ca == null ? (ContentAdmins)request.getSession().getAttribute("user") : ca;
 
-        //Gets the option the user selected in the menu
+        // Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
 
-        //Sets the appropriate dynamic html code (using the ServletHelper Class) based on that option and stores it in the dynamicContent request attribute
+        // Sets the appropriate dynamic html code (using the ServletHelper Class) based on that option and stores it in the dynamicContent request attribute.
+        // Also calls the logout method of the Users class in the appropriate case
         switch (selectedOption){
             case "home":
                 request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ca.getName()));
@@ -67,11 +68,11 @@ public class ContentAdminServlet extends HttpServlet {
                 request.setAttribute("dynamicContent", ServletHelper.removeProvoli());
                 break;
             case "logout":
-                //Code to be implemented in exercise 3
+                ca.logout(request, response);
                 break;
         }
 
-        //Forwards and redirects the "dynamic" request to the ContentAdminPage.jsp
+        // Forwards and redirects the "dynamic" request to the ContentAdminPage.jsp
         request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
     }
 
@@ -86,7 +87,7 @@ public class ContentAdminServlet extends HttpServlet {
             return;
         }
 
-        //Else, based on the postMode attribute, execute the appropriate methods
+        // Else, based on the postMode attribute, execute the appropriate methods
         switch (postMode) {
             case "insert_film":
                 handleInsertNewFilm(request, response);
