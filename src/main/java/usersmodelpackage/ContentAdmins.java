@@ -1,6 +1,6 @@
 package usersmodelpackage;
 
-import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
@@ -16,37 +16,72 @@ public class ContentAdmins extends Users{
         super(name, username, password);
     }
 
-    public void insertFilm(Films filmToBeInserted) throws SQLException {
+    public boolean insertFilm(Films filmToBeInserted) {
         //Uses the DbHelper class to insert the film into the db, displays the appropriate message and returns the film that was inserted.
         if (DbHelper.addNewFilm(filmToBeInserted)) {
-            System.out.println("Film with title " + filmToBeInserted.getFilmTitle() + " inserted successfully by " + username);
+            System.out.println("Film \"" + filmToBeInserted.getFilmTitle() + "\" inserted successfully by " + username);
+            return true;
         } else {
-            System.out.println("Film failed to insert ");
+            System.out.println("Failed to insert film \"" + filmToBeInserted.getFilmTitle() + "\".");
+            System.out.println("Insert action by " + username);
+            return false;
         }
     }
 
-    public Films deleteFilm(Films filmToBeDeleted) throws SQLException {
+    public boolean updateFilm(int filmId, String title, String category, String description, int duration) {
+        if (DbHelper.editFilm(filmId, title, category, description, duration)) {
+            System.out.println("Film \"" + title + "\" updated successfully by " + username);
+            return true;
+        } else {
+            System.out.println("Failed to update film \"" + title + "\".");
+            System.out.println("Update action by " + username);
+            return false;
+        }
+    }
+
+    public boolean deleteFilm(int filmId) {
         //Will delete the film off the db
-        System.out.println("Film deleted successfully!");
-        return filmToBeDeleted;
+       if (DbHelper.removeFilm(filmId)) {
+           System.out.println("Film \"" + filmId + "\" deleted successfully by " + username);
+           return true;
+       } else {
+           System.out.println("Failed to delete film \"" + filmId + "\".");
+           System.out.println("Delete action by " + username);
+           return false;
+       }
     }
 
-    public void createNewProvoli(int filmId, int cinemaId, LocalDateTime startTime) throws SQLException {
-        // 1 -> Get the cinema and film objects from the db based οn their id's using the DbHelper class
-        Cinemas cinema = DbHelper.getCinema(cinemaId);
-        Films film = DbHelper.getFilm(filmId);
-
-        // 2 -> Return if the cinema and/or film objects are null (hence the query couldn't find a match with the specific id in the db)
-        if (cinema == null || film == null) {
-            System.out.println("Couldn't create provoli, because the cinema OR film were not found");
-            return;
-        }
-
-        // 3 -> Add the new Provoli object in the db using the DbHelper class
-        if (DbHelper.addProvoli(new Provoles(film, cinema, startTime))) {
-            System.out.println(getUsername() + " created a new provoli");
+    public boolean insertProvoli(Provoles provoli) {
+        // Add the new Provoli object in the db using the DbHelper class
+        if (DbHelper.addProvoli(provoli)) {
+            System.out.println(username + " created a new provoli");
+            return true;
         } else {
-            System.out.println("Failed to add provoli to database");
+            System.out.println("Failed to insert provoli.");
+            System.out.println("Insert action by " + username);
+            return false;
+        }
+    }
+
+    public boolean updateProvoli(int provoliId, int filmId, int cinemaId, LocalDateTime start_date) {
+        if (DbHelper.editProvoli(provoliId, filmId, cinemaId, start_date)) {
+            System.out.println(username + " updated provoli with ID " + provoliId);
+            return true;
+        } else {
+            System.out.println("Failed to update provoli with ID " + provoliId);
+            System.out.println("Update action by " + username);
+            return false;
+        }
+    }
+
+    public boolean deleteProvoli(int provoliId) {
+        if (DbHelper.removeProvoli(provoliId)) {
+            System.out.println(username + " deleted provoli with ID " + provoliId);
+            return true;
+        } else {
+            System.out.println("Failed to delete provoli with ID " + provoliId);
+            System.out.println("Delete action by " + username);
+            return false;
         }
     }
 }

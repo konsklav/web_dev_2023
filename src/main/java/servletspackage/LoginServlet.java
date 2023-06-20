@@ -1,5 +1,7 @@
 package servletspackage;
 
+import helperclasses.AddUserHelper;
+import helperclasses.DbHelper;
 import helperclasses.HashHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import usersmodelpackage.Admins;
 import usersmodelpackage.ContentAdmins;
-import usersmodelpackage.Customers;
 import usersmodelpackage.Users;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 public class LoginServlet extends HttpServlet {
 
     public void init(){
+        createDefaultAdminIfNotExists();
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -91,5 +93,23 @@ public class LoginServlet extends HttpServlet {
         }
 
         return null;
+    }
+
+    // If a default admin doesn't already exist, then a new one is created with username and password "admin"
+    // This is for the purposes of always having at least one administrator existing in the server's database
+    private void createDefaultAdminIfNotExists()  {
+        ResultSet qr = DbHelper.findUser("admin");
+        try {
+            if (!qr.next()) {
+                Admins defaultAdmin = new Admins("Default Administrator", "admin", "admin");
+                if (AddUserHelper.addAdmin(defaultAdmin)) {
+                    System.out.println("Created default admin!");
+                } else {
+                    System.out.println("Failed to create default admin!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

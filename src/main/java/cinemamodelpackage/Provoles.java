@@ -1,73 +1,76 @@
 package cinemamodelpackage;
-
 import java.time.LocalDateTime;
 
 public class Provoles {
-    private String provoliId;
-    private Films provoliFilm;
-    private Cinemas provoliCinema;
-    private LocalDateTime provoliStartDate;
-    private LocalDateTime provoliEndDate;
-    private int provoliNumberOfReservations;
-    public boolean provoliIsAvailable;
+    private int id;
+    private Films film;
+    private Cinemas cinema;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
+    private int nrOfReservations;
+    public boolean isAvailable;
 
-    public Provoles() {
+    // Constructor appropriate for when getting an already existing Provoli
+    public Provoles(int id, Films film, Cinemas cinema, LocalDateTime startDateTime, int nrOfReservations) {
+        this.film = film;
+        this.cinema = cinema;
+        this.startDateTime = startDateTime;
+        this.endDateTime = startDateTime.plus(film.getFilmDuration());	//Calculates the end time based on the films duration
+        this.nrOfReservations = nrOfReservations;
+
+        this.isAvailable = cinema.getCinemaNumberOfSeats() > nrOfReservations;
     }
 
-    public Provoles(Films provoliFilm, Cinemas provoliCinema, LocalDateTime provoliStartDate) {
-        this.provoliFilm = provoliFilm;
-        this.provoliCinema = provoliCinema;
-        this.provoliStartDate = provoliStartDate;
-        this.provoliEndDate = provoliStartDate.plus(provoliFilm.getFilmDuration());	//Calculates the end time based on the films duration
-        this.provoliNumberOfReservations = 0;
-        this.provoliIsAvailable = true;
+    // Constructor appropriate for when creating a brand new Provoli
+    public Provoles (Films film, Cinemas cinema, LocalDateTime startDateTime) {
+        this(0, film, cinema, startDateTime, 0);
     }
 
-    public String getProvoliId() {
-        return provoliId;
+    public int getId() {
+        return id;
     }
 
-    public Films getProvoliFilm() {
-        return provoliFilm;
+    public Films getFilm() {
+        return film;
     }
 
     public Cinemas getProvoliCinema() {
-        return provoliCinema;
+        return cinema;
     }
 
-    public LocalDateTime getProvoliStartDate() {
-        return provoliStartDate;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public LocalDateTime getProvoliEndDate() {
-        return provoliEndDate;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public int getProvoliNumberOfReservations() {
-        return provoliNumberOfReservations;
+    public int getNrOfReservations() {
+        return nrOfReservations;
     }
 
-    public void setProvoliId(String provoliId) {
-        this.provoliId = provoliId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setProvoliFilm(Films provoliFilm) {
-        this.provoliFilm = provoliFilm;
+    public void setFilm(Films film) {
+        this.film = film;
     }
 
     public void setProvoliCinema(Cinemas provoliCinema) {
-        this.provoliCinema = provoliCinema;
+        this.cinema = provoliCinema;
     }
 
-    public void setProvoliStartDate(LocalDateTime provoliStartDate) {
-        this.provoliStartDate = provoliStartDate;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public void setProvoliEndDate(LocalDateTime provoliEndDate) {
-        this.provoliEndDate = provoliEndDate;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
-    public void setProvoliNumberOfReservations(int provoliNumberOfReservations) {
-        this.provoliNumberOfReservations = provoliNumberOfReservations;
+    public void setNrOfReservations(int nrOfReservations) {
+        this.nrOfReservations = nrOfReservations;
     }
 }

@@ -4,7 +4,6 @@ public class HtmlBuilder {
     public class Form {
         private final String form_css_class = "edit_film_form";
         private String html; // The HTML representation of the object
-
         // Initialize the object with the specified post action
         public Form(String postAction) {
             html = String.format("<form class='%s' action=\"%s\" method=\"post\">\n", form_css_class, postAction);

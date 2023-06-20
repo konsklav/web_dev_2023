@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS Cinemas (
 -- Provoles
 CREATE TABLE IF NOT EXISTS Provoles (
     "id" SERIAL NOT NULL UNIQUE, -- Alternate key
-    "film" INTEGER NOT NULL REFERENCES Films,
-    "cinema" INTEGER NOT NULL REFERENCES Cinemas,
+    "film" INTEGER NOT NULL REFERENCES Films ON DELETE CASCADE,
+    "cinema" INTEGER NOT NULL REFERENCES Cinemas ON DELETE CASCADE,
     "start_date" TIMESTAMP NOT NULL,
     "nr_of_reservations" INTEGER NOT NULL CHECK (nr_of_reservations >= 0) DEFAULT 0,
     PRIMARY KEY ("film", "cinema", "start_date")
@@ -47,6 +47,22 @@ CREATE TABLE IF NOT EXISTS CustomerReservations (
     "nr_of_seats" INTEGER NOT NULL CHECK (nr_of_seats > 0),
     PRIMARY KEY ("customer_id", "provoli_id")
 );
+--
+-- CREATE OR REPLACE FUNCTION remove_provoli_of_film()
+-- RETURNS TRIGGER
+-- AS
+-- $$
+-- BEGIN
+--     DELETE FROM Provoles WHERE film = NEW.id;
+--     RETURN NEW;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
+--
+-- CREATE OR REPLACE TRIGGER remove_provoli_of_film
+--     AFTER DELETE ON Films
+--     FOR EACH ROW
+--     EXECUTE FUNCTION remove_provoli_of_film();
 
 CREATE OR REPLACE FUNCTION check_if_customer_when_reserving()
 RETURNS TRIGGER

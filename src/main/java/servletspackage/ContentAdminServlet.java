@@ -1,6 +1,8 @@
 package servletspackage;
 
 import cinemamodelpackage.Films;
+import cinemamodelpackage.Provoles;
+import helperclasses.DbHelper;
 import helperclasses.ServletHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import usersmodelpackage.ContentAdmins;
 import java.io.IOException;
-import java.sql.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -101,19 +102,63 @@ public class ContentAdminServlet extends HttpServlet {
                 handleEditProvoli(request, response);
             case "remove_provoli":
                 handleRemoveProvoli(request, response);
+            default:
+                request.getRequestDispatcher("LoginPage.jsp").forward(request, response);
+        }
+    }
+    private void handleAddProvoli(HttpServletRequest request, HttpServletResponse response) {
+        // 1 -> Get POST parameters
+        int film_id = Integer.parseInt(request.getParameter("filmid"));
+        int cinema_id = Integer.parseInt(request.getParameter("cinemaid"));
+        LocalDateTime date_and_time = LocalDateTime.parse(request.getParameter("dateandtime"));
+
+        // 2 -> Execute the createNewProvoli function of the ContentAdmins class
+        Provoles provoli = new Provoles(DbHelper.getFilm(film_id), DbHelper.getCinema(cinema_id), date_and_time);
+        boolean succeeded = ca.insertProvoli(provoli);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.INSERT, "screening", -1);
+
+        // 3 -> Go back to assignFilm's dynamic view
+        request.setAttribute("dynamicContent", ServletHelper.addProvoli() + status);
+
+        try {
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void handleRemoveProvoli(HttpServletRequest request, HttpServletResponse response) {
+        int provoliId = Integer.parseInt(request.getParameter("screeningid"));
+
+        boolean succeeded = ca.deleteProvoli(provoliId);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.DELETE, "screening", provoliId);
+
+        request.setAttribute("dynamicContent", ServletHelper.removeProvoli() + status);
+        try {
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleEditProvoli(HttpServletRequest request, HttpServletResponse response) {
-    }
+        int provoliId = Integer.parseInt(request.getParameter("existingscreeningid"));
+        int filmId = Integer.parseInt(request.getParameter("filmid"));
+        int cinemaId = Integer.parseInt(request.getParameter("cinemaid"));
+        LocalDateTime start_date = LocalDateTime.parse(request.getParameter("dateandtime"));
 
-    private void handleRemoveFilm(HttpServletRequest request, HttpServletResponse response) {
-    }
+        boolean succeeded = ca.updateProvoli(provoliId, filmId, cinemaId, start_date);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.UPDATE, "screening", provoliId);
 
-    private void handleEditFilm(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("dynamicContent", ServletHelper.editProvoli() + status);
+        try {
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleInsertNewFilm(HttpServletRequest request, HttpServletResponse response) {
@@ -131,14 +176,12 @@ public class ContentAdminServlet extends HttpServlet {
         film.setFilmDuration(Duration.ofSeconds(duration));
 
         // 3 -> Insert Films object into DB
-        try {
-            ca.insertFilm(film);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        boolean succeeded = ca.insertFilm(film);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.INSERT, "film", -1);
 
         // 4 -> Go back to insertNewFilm's dynamic view
-        request.setAttribute("dynamicContent", ServletHelper.insertNewFilm());
+        request.setAttribute("dynamicContent", ServletHelper.insertNewFilm() + status);
         try {
             request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
@@ -146,26 +189,38 @@ public class ContentAdminServlet extends HttpServlet {
         }
     }
 
-    private void handleAddProvoli(HttpServletRequest request, HttpServletResponse response) {
-        // 1 -> Get POST parameters
-        int film_id = Integer.parseInt(request.getParameter("film"));
-        int cinema_id = Integer.parseInt(request.getParameter("cinema"));
-        LocalDateTime date_and_time = LocalDateTime.parse(request.getParameter("datetime"));
+    private void handleRemoveFilm(HttpServletRequest request, HttpServletResponse response) {
+        int filmId = Integer.parseInt(request.getParameter("filmid"));
 
-        // 2 -> Execute the createNewProvoli function of the ContentAdmins class
-        try {
-            ca.createNewProvoli(film_id, cinema_id, date_and_time);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        // 3 -> Go back to assignFilm's dynamic view
-        request.setAttribute("dynamicContent", ServletHelper.addProvoli());
+        boolean succeeded = ca.deleteFilm(filmId);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.DELETE, "film", filmId);
 
+        request.setAttribute("dynamicContent", ServletHelper.removeFilm() + status);
         try {
             request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleEditFilm(HttpServletRequest request, HttpServletResponse response) {
+        int filmId = Integer.parseInt(request.getParameter("existingfilmid"));
+        String title = request.getParameter("title");
+        String category = request.getParameter("category");
+        String description = request.getParameter("description");
+        int duration = Integer.parseInt(request.getParameter("duration"));
+
+        boolean succeeded = ca.updateFilm(filmId, title, category, description, duration);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.UPDATE, "film", filmId);
+
+        request.setAttribute("dynamicContent", ServletHelper.editFilm() + status);
+        try{
+            request.getRequestDispatcher("ContentAdminPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

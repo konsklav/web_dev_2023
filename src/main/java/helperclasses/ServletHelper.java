@@ -1,8 +1,5 @@
 package helperclasses;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -11,11 +8,48 @@ import java.time.Duration;
 //This is a helper class that implements methods for generating all the dynamic HTML code and other key functions for all the Servlets
 public class ServletHelper {
     private static HtmlBuilder htmlBuilder = new HtmlBuilder();
+    public enum AdminAction {
+        INSERT,
+        UPDATE,
+        DELETE
+    }
 
     // Methods for all Servlets
     public static String welcomeHtml(String fullName) {
         return "<div class=\"text\"> " + "<h1> Welcome, " + fullName + "! </h1>\n"
                 + "<h3> Choose an option in the menu on your left! </h3>" + " </div>";
+    }
+
+    public static String generateStatusText(boolean success, AdminAction action, String object, int id) {
+        String verb1 = null;
+        String verb2 = null;
+        switch (action) {
+            case INSERT:
+                verb1 = "added";
+                verb2 = "add";
+                break;
+            case UPDATE:
+                verb1 = "updated";
+                verb2 = "update";
+                break;
+            case DELETE:
+                verb1 = "deleted";
+                verb2 = "delete";
+                break;
+        }
+        String status = null;
+
+        if (id != -1) {
+            status = success
+                    ? String.format("Successfully %s %s with ID %d!", verb1, object, id)
+                    : String.format("Failed to %s %s with ID %d! Check server logs for more information!", verb2, object, id);
+        }
+        else {
+            status = success
+                    ? String.format("Successfully %s %s!", verb1, object)
+                    : String.format("Failed to %s %s! Check server logs for more information!", verb2, object);
+        }
+        return "<h2>" + status + "</h2>";
     }
 
     public static String viewAllFilms() {

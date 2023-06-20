@@ -3,8 +3,11 @@ package helperclasses;
 import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import cinemamodelpackage.Provoles;
+import usersmodelpackage.Users;
+
 import java.sql.*;
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 //This is a helper class that establishes the connection with the db and implements the key functions that require connection and access to the db
 public class DbHelper {
@@ -77,7 +80,25 @@ public class DbHelper {
         return query(statement);
     }
 
+    public static boolean removeFilm(int id) {
+        String sql = "DELETE FROM Films WHERE id = ?;";
+        PreparedStatement statement = prepareSql(sql);
+        try {
+            statement.setInt(1, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return update(statement) > 0;
+    }
+
+    // Searches the DB for all Provoles and returns rows with data from Provoles, Films and Cinemas.
     public static ResultSet getAllProvoles() {
+        // Prepare the SQL statement and query the DB.
+        // The SQL below retrieves:
+        // From Provoles: ID, start_date, nr_of_reservations, cinema
+        // From Films: title
+        // From Cinemas: nr_of_seats
         String sql = "SELECT p.id, f.title, cinema, start_date, nr_of_reservations, nr_of_seats " +
                     "FROM provoles p " +
                     "JOIN films f ON p.film = f.id " +
@@ -85,6 +106,33 @@ public class DbHelper {
                     "ORDER BY p.id ASC;";
         PreparedStatement statement = prepareSql(sql);
         return query(statement);
+    }
+
+    public static boolean editProvoli(int provoliId, int filmId, int cinemaId, LocalDateTime start_date) {
+        String sql = "UPDATE Provoles SET film = ?, cinema = ?, start_date = ? WHERE id = ?";
+        PreparedStatement statement = prepareSql(sql);
+        try {
+            statement.setInt(1, filmId);
+            statement.setInt(2, cinemaId);
+            statement.setTimestamp(3, Timestamp.valueOf(start_date));
+            statement.setInt(4, provoliId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return update(statement) > 0;
+    }
+
+    // Searches the Provoles table for a Provoli with ID = id, and removes it
+    public static boolean removeProvoli(int id) {
+        String sql = "DELETE FROM Provoles WHERE id = ?;";
+        PreparedStatement statement = prepareSql(sql);
+        try {
+            statement.setInt(1, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return update(statement) > 0;
     }
 
     //Searches the db for a user based on the username given as attribute
@@ -163,13 +211,12 @@ public class DbHelper {
             // 3 -> Search for the film and create the object (IF FOUND)
             ResultSet queryResults = query(statement);
             if (queryResults.next()) {
-                int id = queryResults.getInt(1);
                 String title = queryResults.getString(2);
                 String category = queryResults.getString(3);
                 String description = queryResults.getString(4);
                 int duration = queryResults.getInt(5);
 
-                return new Films(id, title, category, description, Duration.ofSeconds(duration));
+                return new Films(film_id, title, category, description, Duration.ofSeconds(duration));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -177,6 +224,42 @@ public class DbHelper {
         // 4 -> Else return null
         return null;
     }
+
+    public static Provoles getProvoli(int id) {
+        // 1 -> Prepare SQL statement
+        String sql = "SELECT * FROM Provoles WHERE id = ?";
+        PreparedStatement statement = prepareSql(sql);
+
+        try {
+            // 2 -> Configure SQL parameters
+            statement.setInt(1, id);
+
+            // 3 -> Query SQL
+            ResultSet queryResults = query(statement);
+            if (queryResults.next()) {
+                // 4 -> Get query results
+                int filmId = queryResults.getInt(2);
+                int cinemaId = queryResults.getInt(3);
+                LocalDateTime start_date = queryResults.getTimestamp(4).toLocalDateTime();
+                int nrOfReservations = queryResults.getInt(5);
+
+                // 5 -> Get the cinema and film objects from the resulting IDs
+                Cinemas cinema = getCinema(cinemaId);
+                Films film = getFilm(filmId);
+
+                // 6 -> Return the new Provoli object and make sure the film and cinema objects aren't null
+                assert film != null;
+                assert cinema != null;
+                return new Provoles(id, film, cinema, start_date, nrOfReservations);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 7 -> If there was an exception OR no rows from the query, return null
+        return null;
+    }
+
 
     //Adds a provoli (given as the attribute) into the db
     public static boolean addProvoli(Provoles provoli) {
@@ -186,9 +269,9 @@ public class DbHelper {
 
         // 2 -> Set the parameters
         try {
-            statement.setInt(1, provoli.getProvoliFilm().getFilmId());
+            statement.setInt(1, provoli.getFilm().getFilmId());
             statement.setInt(2, provoli.getProvoliCinema().getCinemaId());
-            statement.setTimestamp(3, Timestamp.valueOf(provoli.getProvoliStartDate()));
+            statement.setTimestamp(3, Timestamp.valueOf(provoli.getStartDateTime()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -232,6 +315,23 @@ public class DbHelper {
         }
 
         // 3 -> Return true if the row update count is greater than 0
+        return update(statement) > 0;
+    }
+
+    public static boolean editFilm(int filmId, String title, String category, String description, int duration) {
+        String sql = "UPDATE Films SET title = ?, category = ?, description = ?, duration = ? WHERE id = ?;";
+        PreparedStatement statement = prepareSql(sql);
+
+        try {
+            statement.setString(1, title);
+            statement.setString(2, category);
+            statement.setString(3, description);
+            statement.setInt(4, duration);
+            statement.setInt(5, filmId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return update(statement) > 0;
     }
 }
