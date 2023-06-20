@@ -69,7 +69,7 @@ public class ContentAdminServlet extends HttpServlet {
                 break;
             case "logout":
                 ca.logout(request, response);
-                break;
+                return;
         }
 
         // Forwards and redirects the "dynamic" request to the ContentAdminPage.jsp

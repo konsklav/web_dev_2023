@@ -55,8 +55,16 @@ public class Users {
         return DbHelper.findUser(username);
     }
 
-    // Calls the logout method of the ServletHelper class providing it with the request and response of the page it was triggered by
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ServletHelper.logout(request, response);
+        // 1 -> Invalidates the session
+        request.getSession().invalidate();
+
+        // 2 -> Clears the cache, setting different headers for compatibility with all HTTP versions and caching mechanisms
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setHeader("Expires", "0"); // Proxies.
+
+        // 3 -> Redirects back to the Login Page upon successful logout
+        response.sendRedirect("LoginPage.jsp");
     }
 }

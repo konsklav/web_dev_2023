@@ -18,19 +18,6 @@ public class ServletHelper {
                 + "<h3> Choose an option in the menu on your left! </h3>" + " </div>";
     }
 
-    public static void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 1 -> Invalidates the session
-        request.getSession().invalidate();
-
-        // 2 -> Clears the cache, setting different headers for compatibility with all HTTP versions and caching mechanisms
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-        response.setHeader("Expires", "0"); // Proxies.
-
-        // 3 -> Redirects back to the Login Page upon successful logout
-        response.sendRedirect("LoginPage.jsp");
-    }
-
     public static String viewAllFilms() {
         // 1 -> Initialize table HTML
         HtmlBuilder.Table filmsTable = htmlBuilder.new Table("ID", "Title", "Category", "Duration");

@@ -31,8 +31,7 @@ public class SignupServlet extends HttpServlet {
         // Adds the new user (customer) in the db using the addCustomer method of the DbHelper class and dispatches to the customer-servlet if the insertion was successful
         Customers cu = new Customers(full_name, username, password);
         if(AddUserHelper.addCustomer(cu)) {
-            request.getSession().setAttribute("user", cu);
-            request.getRequestDispatcher("/customer-servlet").forward(request, response);
+            request.getRequestDispatcher("/login-servlet").forward(request, response);
         }
     }
 }
