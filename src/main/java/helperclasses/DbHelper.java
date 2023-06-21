@@ -334,4 +334,42 @@ public class DbHelper {
 
         return update(statement) > 0;
     }
+
+    public static boolean insertCustomerReservation(int customerId, int provoliId, int nrOfSeats) {
+        String sql = "INSERT INTO CustomerReservations (customer_id, provoli_id, nr_of_seats) VALUES (?, ?, ?);";
+        PreparedStatement statement = prepareSql(sql);
+
+        try {
+            statement.setInt(1, customerId);
+            statement.setInt(2, provoliId);
+            statement.setInt(3, nrOfSeats);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return update(statement) > 0;
+    }
+
+    // Selects for each reservation made under customerId the following:
+    // - Film Title
+    // - Cinema ID
+    // - Nr of Seats Reserved
+    // - Date and Time of Reservation
+    public static ResultSet viewAllReservationsForCustomer(int customerId) {
+        String sql = "SELECT f.title, p.cinema, c.nr_of_seats, rh.reservation_time " +
+                "FROM ReservationHistory rh JOIN CustomerReservations c " +
+                "ON rh.reservation_id = c.id JOIN Provoles p " +
+                "ON c.provoli_id = p.id JOIN Films f " +
+                "ON p.film = f.id " +
+                "WHERE rh.customer_id = ?;";
+        PreparedStatement statement = prepareSql(sql);
+
+        try {
+            statement.setInt(1, customerId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return query(statement);
+    }
 }

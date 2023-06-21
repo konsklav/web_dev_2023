@@ -1,6 +1,7 @@
 package usersmodelpackage;
 
 import helperclasses.DbHelper;
+import helperclasses.HashHelper;
 import helperclasses.ServletHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,12 +9,10 @@ import java.io.IOException;
 import java.sql.*;
 
 public class Users {
+    protected int id;
     protected String name;
     protected String username;
     protected String password;
-
-    public Users() {
-    }
 
     public Users(String username, String password) {
         this.username = username;
@@ -26,6 +25,14 @@ public class Users {
         this.password = password;
     }
 
+    public Users(int id, String name, String username, String password) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
+
+    public int getId() {return id;}
     public String getName() {
         return name;
     }
@@ -52,7 +59,28 @@ public class Users {
 
     // Accesses DB and queries the "Users" table for the (username, password) combination
     public ResultSet login() {
-        return DbHelper.findUser(username);
+        // 1 -> Query DB and get the User represented by 'username' (possible 0 row return if not found)
+        ResultSet userQuery = DbHelper.findUser(username);
+        try {
+            if (userQuery.next()) {     //If true, the query returned a result, thus the credentials validate through the db
+                String salt = userQuery.getString(4);   //Gets the stored salt from the db
+                String storedHash = userQuery.getString(5); //Gets the stored hashedPassword from the db
+                if (!storedHash.equals(HashHelper.hashPassword(password, salt))) {
+                    // If passwords do NOT match, return null
+                    return null;
+                }
+                // If the user was found in the DB AND the passwords match, return the ResultSet
+                id = userQuery.getInt(1);
+                name = userQuery.getString(2);
+                return userQuery;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // If this block hits, a SQLException occurred.
+        return null;
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -40,7 +40,7 @@ public class AdminServlet extends HttpServlet {
                 break;
             case "logout":
                 ad.logout(request, response);
-                break;
+                return;
         }
         request.getRequestDispatcher("AdminPage.jsp").forward(request, response);
     }
@@ -69,7 +69,7 @@ public class AdminServlet extends HttpServlet {
 
     private void handleAddContentAdmin(HttpServletRequest request, HttpServletResponse response) {
         // 1 -> Gets the parameters (name, username and password) off the request sent by the form in AdminPage.jsp
-        String name = request.getParameter("name");
+        String name = request.getParameter("fullname");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 

@@ -1,30 +1,34 @@
 package usersmodelpackage;
 
 import cinemamodelpackage.Provoles;
+import helperclasses.DbHelper;
+
+import java.sql.ResultSet;
 
 public class Customers extends Users{
-    private Provoles customerReservation;
-
-    public Customers() {
-    }
-
     public Customers(String name, String username, String password) {
         super(name, username, password);
     }
-
-    public void showAvailableFilms() {
-        //Will search the db for all available films and will print them out
-        System.out.println("Available films: ");
+    public Customers(int id, String name, String username, String password) {
+        super(id, name, username, password);
+    }
+    public Customers(Users user) {
+        this(user.id, user.name, user.username, user.password);
     }
 
-    public boolean makeReservation(String provoliId, int seats) {
-        //Will select the provoli from the db based on provoliId parameter and set this.customerReservation to that provoli
-        //If there are available seats for this provoli according to the seats parameter, then it will make the reservation and return true
-        //else, it will return false
-        return true; //Temporary for the purpose of Askisi 1
+    public boolean makeReservation(int provoliId, int seats) {
+        if (DbHelper.insertCustomerReservation(id, provoliId, seats)) {
+            System.out.println(username + " succesfully made a reservation for Provoli ID " + provoliId);
+            System.out.println("Seats: " + seats);
+            return true;
+        } else {
+            System.out.println("Could not make reservation for " + username);
+            return false;
+        }
     }
 
-    public Provoles viewReservation() {
-        return customerReservation;
+    public ResultSet viewReservationHistory() {
+        return DbHelper.viewAllReservationsForCustomer(id);
     }
+
 }

@@ -7,11 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Admins extends Users{
-    public Admins() {
+
+    public Admins(int id, String name, String username, String password) {
+        super(id, name, username, password);
     }
 
     public Admins(String name, String username, String password) {
         super(name, username, password);
+    }
+
+    public Admins(Users user) {
+        this(user.id, user.name, user.username, user.password);
     }
 
     public boolean createContentAdmin(ContentAdmins ca) {

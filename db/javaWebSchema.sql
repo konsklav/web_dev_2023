@@ -3,7 +3,7 @@
 -- Running this file will essentially wipe the existing database and refresh it with the sample INSERT data only.
 
 -- "Reset" the tables by removing and creating them again IF they already exist
-DROP TABLE IF EXISTS Films, Cinemas, Provoles, Users,CustomerReservations CASCADE;
+DROP TABLE IF EXISTS Films, Cinemas, Provoles, Users, CustomerReservations, ReservationHistory CASCADE;
 -- Films
 CREATE TABLE IF NOT EXISTS Films (
     "id" SERIAL NOT NULL PRIMARY KEY,
@@ -42,27 +42,47 @@ CREATE TABLE IF NOT EXISTS Users (
 
 -- CustomerReservations
 CREATE TABLE IF NOT EXISTS CustomerReservations (
+    "id" SERIAL NOT NULL UNIQUE, -- Alternate key
     "customer_id" INTEGER NOT NULL REFERENCES Users("id"),
     "provoli_id" INTEGER NOT NULL REFERENCES Provoles("id"),
     "nr_of_seats" INTEGER NOT NULL CHECK (nr_of_seats > 0),
     PRIMARY KEY ("customer_id", "provoli_id")
 );
---
--- CREATE OR REPLACE FUNCTION remove_provoli_of_film()
--- RETURNS TRIGGER
--- AS
--- $$
--- BEGIN
---     DELETE FROM Provoles WHERE film = NEW.id;
---     RETURN NEW;
--- END;
--- $$
--- LANGUAGE plpgsql;
---
--- CREATE OR REPLACE TRIGGER remove_provoli_of_film
---     AFTER DELETE ON Films
---     FOR EACH ROW
---     EXECUTE FUNCTION remove_provoli_of_film();
+
+CREATE TABLE IF NOT EXISTS ReservationHistory (
+    "customer_id" INTEGER NOT NULL REFERENCES Users("id"),
+    "reservation_id" INTEGER NOT NULL REFERENCES CustomerReservations("id"),
+    "reservation_time" TIMESTAMP NOT NULL,
+    PRIMARY KEY ("customer_id", "reservation_id")
+);
+
+CREATE OR REPLACE FUNCTION update_provoles_reservations_and_history()
+RETURNS TRIGGER
+AS
+$$
+DECLARE
+    provoli_id INT;
+    nr_of_seats INT;
+BEGIN
+    -- Do UPDATE on Provoles
+    SELECT NEW.provoli_id INTO provoli_id;
+    SELECT NEW.nr_of_seats INTO nr_of_seats;
+
+    UPDATE Provoles SET nr_of_reservations = nr_of_reservations + nr_of_seats
+    WHERE Provoles.id = provoli_id;
+
+    -- Do INSERT on ReservationHistory
+    INSERT INTO ReservationHistory VALUES (NEW.customer_id, NEW.id, NOW());
+
+    RETURN NEW;
+END;
+$$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_provoles_reservations_and_history
+AFTER INSERT ON CustomerReservations
+FOR EACH ROW
+EXECUTE FUNCTION update_provoles_reservations_and_history();
 
 CREATE OR REPLACE FUNCTION check_if_customer_when_reserving()
 RETURNS TRIGGER

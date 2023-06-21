@@ -15,7 +15,9 @@ public class CustomerServlet extends HttpServlet {
     String postMode = null;
 
     @Override
-    public void init() throws ServletException { super.init(); }
+    public void init() throws ServletException {
+        super.init();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,25 +31,23 @@ public class CustomerServlet extends HttpServlet {
         switch (selectedOption) {
             case "home":
                 request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(cu.getName()));
+                break;
             case "view_all_films":
-                postMode = selectedOption;
-                //!!! Να υλοποιήσουμε το τι θα κάνει
+                request.setAttribute("dynamicContent", ServletHelper.viewAllFilms());
                 break;
             case "view_all_provoles":
-                postMode = selectedOption;
-                //!!! Να υλοποιήσουμε το τι θα κάνει
+                request.setAttribute("dynamicContent", ServletHelper.viewAllProvoles());
                 break;
             case "make_reservation":
                 postMode = selectedOption;
-                //!!! Να υλοποιήσουμε το τι θα κάνει
+                request.setAttribute("dynamicContent", ServletHelper.makeReservation());
                 break;
             case "show_reservation_history":
-                postMode = selectedOption;
-                //!!! Να υλοποιήσουμε το τι θα κάνει
+                request.setAttribute("dynamicContent", ServletHelper.viewReservationHistory(cu));
                 break;
             case "logout":
                 cu.logout(request, response);
-                break;
+                return;
         }
         request.getRequestDispatcher("CustomerPage.jsp").forward(request, response);
     }
@@ -64,21 +64,28 @@ public class CustomerServlet extends HttpServlet {
         }
 
         // Else, based on the postMode attribute, execute the appropriate methods
-        switch (postMode) {
-            case "view_all_films":
-                //!!! Να υλοποιήσουμε το τι θα κάνει
-                break;
-            case "view_all_provoles":
-                //!!! Να υλοποιήσουμε το τι θα κάνει
-                break;
-            case "make_reservation":
-                //!!! Να υλοποιήσουμε το τι θα κάνει
-                break;
-            case "show_reservation_history":
-                //!!! Να υλοποιήσουμε το τι θα κάνει
-                break;
+        if ("make_reservation".equals(postMode)) {
+            handleMakeReservation(request, response);
         }
     }
 
-    // !!! Να υλοποιήσουμε τις μεθόδους
+    private void handleMakeReservation(HttpServletRequest request, HttpServletResponse response) {
+        // 1 -> Get the POST parameters
+        int provoliId = Integer.parseInt(request.getParameter("screeningid"));
+        int nrOfSeats = Integer.parseInt(request.getParameter("numberofseats"));
+
+        // 2 -> Call DB function through customer object
+        boolean succeeded = cu.makeReservation(provoliId, nrOfSeats);
+        String status = ServletHelper
+                .generateStatusText(succeeded, ServletHelper.AdminAction.INSERT, "reservation", cu.getId());
+
+        // 3 -> Send user back to CustomerPage.jsp?option=make_reservation with status of success or failure
+        request.setAttribute("dynamicContent", ServletHelper.makeReservation() + status);
+        try {
+            request.getRequestDispatcher("CustomerPage.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

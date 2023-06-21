@@ -1,9 +1,12 @@
 package helperclasses;
 
+import usersmodelpackage.Customers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 //This is a helper class that implements methods for generating all the dynamic HTML code and other key functions for all the Servlets
 public class ServletHelper {
@@ -190,4 +193,35 @@ public class ServletHelper {
     }
 
     // Customer-specific methods
+    public static String makeReservation() {
+        HtmlBuilder.Form makeReservationForm = htmlBuilder.new Form("customer-servlet");
+        makeReservationForm.addInput("text", "Screening ID");
+        makeReservationForm.addInput("text", "Number of Seats");
+
+        return makeReservationForm.toString();
+    }
+
+    public static String viewReservationHistory(Customers cu) {
+        HtmlBuilder.Table reservationHistoryTable =
+                htmlBuilder.new Table("Film Title", "Cinema ID", "Number of Seats", "Date and Time of Reservation");
+
+        ResultSet resHistoryResults = cu.viewReservationHistory();
+
+        if (resHistoryResults == null)
+            return reservationHistoryTable.toString();
+        try {
+            while (resHistoryResults.next()) {
+                String filmTitle = resHistoryResults.getString(1);
+                int cinemaId = resHistoryResults.getInt(2);
+                int nrOfSeats = resHistoryResults.getInt(3);
+                LocalDateTime resDate = resHistoryResults.getTimestamp(4).toLocalDateTime();
+
+                reservationHistoryTable.addRow(filmTitle, cinemaId, nrOfSeats, resDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reservationHistoryTable.toString();
+    }
 }
