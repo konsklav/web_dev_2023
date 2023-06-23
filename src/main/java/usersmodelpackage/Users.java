@@ -2,7 +2,6 @@ package usersmodelpackage;
 
 import helperclasses.DbHelper;
 import helperclasses.HashHelper;
-import helperclasses.ServletHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,6 +32,7 @@ public class Users {
     }
 
     public int getId() {return id;}
+
     public String getName() {
         return name;
     }

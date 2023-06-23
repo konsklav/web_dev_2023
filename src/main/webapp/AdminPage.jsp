@@ -40,7 +40,7 @@
     </ul>
     <ul class="logout">
         <li>
-            <a href="content-admin-servlet?option=logout">
+            <a href="customer-servletservlet?option=logout">
                 <i class="fa fa-power-off fa-2x"></i>
                 <span class="nav-text">
                             Logout

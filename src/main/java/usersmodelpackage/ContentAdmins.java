@@ -1,13 +1,9 @@
 package usersmodelpackage;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import cinemamodelpackage.Cinemas;
 import cinemamodelpackage.Films;
 import cinemamodelpackage.Provoles;
 import helperclasses.DbHelper;
-
-import javax.swing.text.AbstractDocument;
 
 public class ContentAdmins extends Users{
 
@@ -18,6 +14,7 @@ public class ContentAdmins extends Users{
     public ContentAdmins(String name, String username, String password) {
         super(name, username, password);
     }
+
     public ContentAdmins(Users user) {
         this(user.id, user.name, user.username, user.password);
     }

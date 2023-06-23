@@ -32,7 +32,7 @@
 		</li>
 		<li class="has-subnav">
 			<a href="customer-servlet?option=view_all_provoles">
-				<i class="fa fa-plus fa-2x"></i>
+				<i class="fa fa-globe fa-2x"></i>
 				<span class="nav-text">
                             View all screenings
                 </span>
@@ -40,7 +40,7 @@
 		</li>
 		<li class="has-subnav">
 			<a href="customer-servlet?option=make_reservation">
-				<i class="fa fa-globe fa-2x"></i>
+				<i class="fa fa-plus fa-2x"></i>
 				<span class="nav-text">
                             Make a reservation
                 </span>
@@ -48,7 +48,7 @@
 		</li>
 		<li class="has-subnav">
 			<a href="customer-servlet?option=show_reservation_history">
-				<i class="fa fa-globe fa-2x"></i>
+				<i class="fa fa-eye fa-2x"></i>
 				<span class="nav-text">
                             Show reservation history
                 </span>
@@ -57,7 +57,7 @@
 	</ul>
 	<ul class="logout">
 		<li>
-			<a href="content-admin-servlet?option=logout">
+			<a href="customer-servlet?option=logout">
 				<i class="fa fa-power-off fa-2x"></i>
 				<span class="nav-text">
                             Logout

@@ -1,17 +1,17 @@
 package usersmodelpackage;
 
-import cinemamodelpackage.Provoles;
 import helperclasses.DbHelper;
-
 import java.sql.ResultSet;
 
 public class Customers extends Users{
     public Customers(String name, String username, String password) {
         super(name, username, password);
     }
+
     public Customers(int id, String name, String username, String password) {
         super(id, name, username, password);
     }
+
     public Customers(Users user) {
         this(user.id, user.name, user.username, user.password);
     }
