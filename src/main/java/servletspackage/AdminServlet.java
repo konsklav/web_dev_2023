@@ -30,6 +30,7 @@ public class AdminServlet extends HttpServlet {
         switch (selectedOption) {
             case "home":
                 request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ad.getName()));
+                break;
             case "add_content_admin":
                 postMode = selectedOption;
                 request.setAttribute("dynamicContent", ServletHelper.addContentAdmin());
@@ -76,7 +77,7 @@ public class AdminServlet extends HttpServlet {
         // 2 -> Creates a new ContentAdmins object using the parameters from above
         ContentAdmins ca = new ContentAdmins(name, username, password);
 
-        //!!! 3 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
+        // 3 -> Create status HTML for display if the action succeeded or failed
         String status = ad.createContentAdmin(ca) ?
                 "Successfully created ContentAdmin \"" + ca.getUsername() +"\"!" :
                 "Failed to create ContentAdmin \"" + username + "\", check server logs for more info!";
@@ -95,7 +96,7 @@ public class AdminServlet extends HttpServlet {
         // 1 -> Gets the username parameter off the request sent by the form in AdminPage.jsp
         String username = request.getParameter("username");
 
-        //!!! 2 -> ΝΑ ΜΑΣ ΕΞΗΓΗΣΕΙ Ο ΤΖΩΡΤΖΗΣ ΤΙ ΚΑΝΕΙ ΚΑΙ ΝΑ ΒΑΛΟΥΜΕ ΤΟ ΣΧΟΛΙΟ
+        // 2 -> Create status HTML for display if the action succeeded or failed
         String status = ad.deleteContentAdmin(username) ?
                 "Successfully removed ContentAdmin \"" + username + "\"!" :
                 "Failed to remove ContentAdmin \"" +username + "\", check server logs for more info!";
