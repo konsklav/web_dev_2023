@@ -21,7 +21,7 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        cu = cu == null ? (Customers) request.getSession().getAttribute("user") : cu;
+        cu = (Customers) request.getSession().getAttribute("user");
 
         // Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
@@ -56,7 +56,7 @@ public class CustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // If the user is redirected from LoginPage.jsp, do the following and return:
         if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
-            cu = cu == null ? (Customers) request.getSession().getAttribute("user") : cu;
+            cu = (Customers) request.getSession().getAttribute("user");
             request.setAttribute("from-login", false);
             request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(cu.getName()));
             request.getRequestDispatcher("CustomerPage.jsp").forward(request, response);

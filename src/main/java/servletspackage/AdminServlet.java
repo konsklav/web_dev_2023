@@ -20,7 +20,7 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ad = ad == null ? (Admins) request.getSession().getAttribute("user") : ad;
+        ad = (Admins) request.getSession().getAttribute("user");
 
         // Gets the option the user selected in the menu
         String selectedOption = request.getParameter("option");
@@ -50,7 +50,7 @@ public class AdminServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // If the user is redirected from LoginPage.jsp, do the following and return:
         if (request.getAttribute("from-login") != null && (boolean) request.getAttribute("from-login")) {
-            ad = ad == null ? (Admins) request.getSession().getAttribute("user") : ad;
+            ad = (Admins) request.getSession().getAttribute("user");
             request.setAttribute("from-login", false);
             request.setAttribute("dynamicContent", ServletHelper.welcomeHtml(ad.getName()));
             request.getRequestDispatcher("AdminPage.jsp").forward(request, response);
