@@ -4,6 +4,7 @@ import helperclasses.DbHelper;
 import java.sql.ResultSet;
 
 public class Customers extends Users{
+
     public Customers(String name, String username, String password) {
         super(name, username, password);
     }
@@ -30,5 +31,4 @@ public class Customers extends Users{
     public ResultSet viewReservationHistory() {
         return DbHelper.viewAllReservationsForCustomer(id);
     }
-
 }

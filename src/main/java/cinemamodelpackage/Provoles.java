@@ -12,12 +12,12 @@ public class Provoles {
 
     // Constructor appropriate for when getting an already existing Provoli
     public Provoles(int id, Films film, Cinemas cinema, LocalDateTime startDateTime, int nrOfReservations) {
+        this.id = id;
         this.film = film;
         this.cinema = cinema;
         this.startDateTime = startDateTime;
         this.endDateTime = startDateTime.plus(film.getFilmDuration());	//Calculates the end time based on the films duration
         this.nrOfReservations = nrOfReservations;
-
         this.isAvailable = cinema.getCinemaNumberOfSeats() > nrOfReservations;
     }
 

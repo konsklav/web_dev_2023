@@ -221,6 +221,5 @@ public class ContentAdminServlet extends HttpServlet {
         } catch (ServletException | IOException e) {
             e.printStackTrace();
         }
-
     }
 }
