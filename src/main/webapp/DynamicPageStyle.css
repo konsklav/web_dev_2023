@@ -125,7 +125,6 @@ nav ul,nav li {
     top: 50%;
     right: 50%;
     transform: translate(50%,-50%);
-    background-image: linear-gradient(to right, rgba(142, 242, 255, 0.4), #949fe5);
 }
 
 @font-face {
