@@ -2,7 +2,6 @@
 
 <html>
 <head>
-	<!-- Θα μπορουσε κιολας το title να γράφει το ονομα του Customer/Admin/CA -->
 	<title>Customer Page</title>
 	<link rel="stylesheet" href="DynamicPageStyle.css">
 	<meta charset="ISO-8859-1">
