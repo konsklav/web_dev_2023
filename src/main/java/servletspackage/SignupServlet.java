@@ -28,7 +28,7 @@ public class SignupServlet extends HttpServlet {
             return;
         }
 
-        // Adds the new user (customer) in the db using the addCustomer methods of the DbHelper class and redirects to the LoginPage.jsp if the insertion was successful
+        // Adds the new user (customer) in the db using the addCustomer method of the AddUserHelper class and redirects to the LoginPage.jsp if the insertion was successful
         Customers cu = new Customers(full_name, username, password);
         if(AddUserHelper.addCustomer(cu)) {
             response.sendRedirect("LoginPage.jsp");

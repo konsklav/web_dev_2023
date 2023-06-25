@@ -47,7 +47,7 @@ public class AddUserHelper {
         String salt = HashHelper.generateSalt();
         String hashedPassword = HashHelper.hashPassword(plainPassword, salt);
 
-        // 3 -> Add the user and tha hashed password to the db
+        // 3 -> Add the user and the hashed password to the db
         return DbHelper.addUser("CU", name, username, salt, hashedPassword);
     }
 }
