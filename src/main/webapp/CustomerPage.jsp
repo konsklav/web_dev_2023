@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
-
+<% if (request.getSession().getAttribute("user") == null && request.getAttribute("from-login") == null) {
+	response.sendRedirect("LoginPage.jsp");
+}%>
 <html>
 <head>
 	<title>Customer Page</title>
